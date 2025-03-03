@@ -1,5 +1,10 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
-  devtools: { enabled: true }
+  runtimeConfig: {
+    public: {
+      PUSHER_APP_KEY: process.env.NUXT_PUBLIC_PUSHER_APP_KEY,
+      PUSHER_APP_CLUSTER: process.env.NUXT_PUBLIC_PUSHER_APP_CLUSTER
+    }
+  },
+
+  compatibilityDate: "2025-03-03",
 })
