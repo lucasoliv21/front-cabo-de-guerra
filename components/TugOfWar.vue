@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="header">
-      <h2>Cabo de Guerra</h2>
+      <h2>Cabo de Guerra - Do Sexo</h2>
       <p class="maintenance">Manutenção em Andamento</p>
     </div>
     <div class="scoreboard">
