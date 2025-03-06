@@ -10,6 +10,8 @@ onMounted(() => {
     ws.onopen = function() {
         console.log('Conectado!');
         connection.value = 'connected';
+
+        ws.send('send-state');
     };
 
     ws.onmessage = function(e) {
