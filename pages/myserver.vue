@@ -40,6 +40,19 @@ onMounted(() => {
     };
 })
 
+const gameStatus = computed(() => {
+    switch(state.value.status) {
+        case 'waiting':
+            return 'Aguardando início';
+        case 'running':
+            return 'Em andamento';
+        case 'finished':
+            return 'Finalizado';
+        default:
+            return '--';
+    };
+});
+
 </script>
 
 <template>
@@ -50,6 +63,7 @@ onMounted(() => {
         <!-- Conectado -->
         <div v-else>
             <p>Conectado!</p>
+            <p>Status: {{ gameStatus }}</p>
             <p>Time casa: {{ state.homeName }}</p>
             <p>Time visitante: {{ state.awayName }}</p>
             <p>{{ state.homeVotes }} x {{ state.awayVotes }}</p>
