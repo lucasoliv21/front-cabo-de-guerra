@@ -59,7 +59,7 @@ const gameWinner = computed(() => {
     }
 
     if (state.value.homeVotes === state.value.awayVotes) {
-        return 'draw';
+        return 'Empate';
     }
 
     return state.value.homeVotes > state.value.awayVotes 
@@ -71,32 +71,127 @@ const gameWinner = computed(() => {
 
 <template>
     <div>
-        <div v-if="connection === 'disconnected'"><p>Erro de conexão! Atualize a página.</p></div>
-        <div v-else-if="connection === 'pending'"><p>Conectando...</p></div>
+        <div v-if="connection === 'disconnected'">
+            <p class="absolute bg-red-500 top-5 left-5 rounded-md text-xs p-1 text-white uppercase font-bold select-none">
+                Erro de conexão! Atualize a página.
+            </p>
+        </div>
+        <div v-else-if="connection === 'pending'">
+            <p class="absolute bg-yellow-500 top-5 left-5 rounded-md text-xs p-1 text-white uppercase font-bold select-none">
+                Conectando...
+            </p>
+        </div>
 
         <!-- Conectado -->
         <div v-else>
-            <p>Conectado!</p>
+            <p class="absolute bg-green-500 top-5 left-5 rounded-md text-xs p-1 text-white uppercase font-bold select-none">Conectado</p>
 
             <!-- Team showoff -->
             <div v-if="state.status === 'waiting'">
-                <p>Os times que irão disputar são:</p>
-                <p>{{ state.homeName }}</p>
-                <p>{{ state.awayName }}</p>
+                <div class="flex flex-col justify-center items-center bg-gradient-to-b from-[#8B5A2B] via-[#A97142] to-[#5C4033] min-h-screen">
+                    <div class="bg-white container items-center mx-2 p-2 gap-4 rounded flex flex-col">
+                        <p class="font-bold text-4xl text-center">Próximo confronto:</p>
+                        <div class="flex w-full gap-5 justify-around items-center">
+                            
+                            <!-- Home -->
+                            <div class="w-1/3">
+                                <img :src="state.homeFlag" alt="home" class="w-20 h-20 mx-auto">
+                                <p class="text-center">{{ state.homeName }}</p>
+                            </div>
+
+                            <!-- VS -->
+                             <p>vs.</p>
+
+
+                            <!-- Away -->
+                            <div class="w-1/3">
+                                <img :src="state.awayFlag" alt="home" class="w-20 h-20 mx-auto">
+                                <p class="text-center">{{ state.awayName }}</p>
+                            </div>
+
+                        </div>
+
+                        <div class="flex cursor-wait grow w-full gap-5 p-2 bg-blue-800 text-white rounded justify-around items-center">
+                            Votação inicia em breve...
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- <p>Os times que irão disputar são:</p>
+                    <p>{{ state.homeName }}</p>
+                    <p>{{ state.awayName }}</p> -->
+                </div>
             </div>
 
             <!-- Voting -->
             <div v-if="state.status === 'running'">
-                <p>Vote no seu time favorito:</p>
-                <button @click="vote('home')" :disabled="state.status !== 'running'">Vote {{ state.homeName }}</button>
-                <button @click="vote('away')" :disabled="state.status !== 'running'">Vote {{ state.awayName }}</button>
+                <div class="flex flex-col justify-center items-center bg-gradient-to-b from-[#4CAF50] via-[#388E3C] to-[#1B5E20] min-h-screen">
+                    <div class="bg-white container items-center mx-2 p-2 gap-4 rounded flex flex-col">
+                        <p class="font-bold text-center text-4xl">Vote no seu time favorito:</p>
+                        <div class="flex w-full gap-5 justify-around items-center">
+                            
+                            <!-- Home -->
+                            <div class="w-1/3">
+                                <img :src="state.homeFlag" alt="home" class="w-20 h-20 mx-auto">
+                                <p class="text-center">{{ state.homeName }}</p>
+                            </div>
+
+                            <!-- VS -->
+                             <p>vs.</p>
+
+
+                            <!-- Away -->
+                            <div class="w-1/3">
+                                <img :src="state.awayFlag" alt="home" class="w-20 h-20 mx-auto">
+                                <p class="text-center">{{ state.awayName }}</p>
+                            </div>
+
+                        </div>
+
+                        <div class="flex gap-5 justify-around items-center">
+                            <button @click="vote('home')" :disabled="state.status !== 'running'" class="bg-blue-500 text-white cursor-pointer p-2 rounded-md">Vote {{ state.homeName }}</button>
+                            <button @click="vote('away')" :disabled="state.status !== 'running'" class="bg-blue-500 text-white cursor-pointer p-2 rounded-md">Vote {{ state.awayName }}</button>
+                        </div>
+                    </div>
+                    
+                </div>
             </div>
 
             <!-- Winner screen -->
             <div v-if="state.status === 'finished'">
-                <p>Resultado final:</p>
-                <p>{{ state.homeName }} {{ state.homeVotes }} x {{ state.awayVotes }} {{ state.awayName }}</p>
-                <p>Time vencedor: {{ gameWinner }}</p>
+                <div class="flex flex-col justify-center items-center bg-gradient-to-r from-[#FFD700] via-[#FFC107] to-[#B8860B] min-h-screen">
+                    <div class="bg-white container items-center mx-2 p-2 gap-4 rounded flex flex-col">
+                        <p class="font-bold text-center text-4xl">Vencedor da Rodada</p>
+                        <div class="flex w-full gap-5 justify-around items-center">
+                            
+                            <!-- Home -->
+                            <div :class="{'bg-black/5': gameWinner === state.homeName}" class="w-1/3 flex py-2 rounded-lg flex-col items-center">
+                                <p class="text-7xl">{{ state.homeVotes }}</p>
+                                <br>
+                                <img :src="state.homeFlag" alt="home" class="w-20 h-20 mx-auto">
+                                <p class="text-center">{{ state.homeName }}</p>
+                            </div>
+
+                            <!-- VS -->
+                             <p>vs.</p>
+
+
+                            <!-- Away -->
+                            <div :class="{'bg-black/5': gameWinner === state.awayName}" class="w-1/3 flex py-2 rounded-lg flex-col items-center">
+                                <p class="text-7xl">{{ state.awayVotes }}</p>
+                                <br>
+                                <img :src="state.awayFlag" alt="home" class="w-20 h-20 mx-auto">
+                                <p class="text-center">{{ state.awayName }}</p>
+                            </div>
+
+                        </div>
+
+                        <div class="flex cursor-wait grow w-full gap-5 p-2 bg-red-800 text-white rounded justify-around items-center">
+                            Votação encerrada! {{ gameWinner === 'Empate' ? 'Aconteceu um empate.' : `O vencedor foi ${gameWinner}!` }}
+                        </div>
+                    </div>
+                    
+                </div>
             </div>
 
             <!-- <p>Status: {{ gameStatus }}</p>
