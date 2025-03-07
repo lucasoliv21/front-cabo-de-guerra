@@ -53,6 +53,20 @@ const gameStatus = computed(() => {
     };
 });
 
+const gameWinner = computed(() => {
+    if (state.value.status !== 'finished') {
+        return '--';
+    }
+
+    if (state.value.homeVotes === state.value.awayVotes) {
+        return 'draw';
+    }
+
+    return state.value.homeVotes > state.value.awayVotes 
+        ? state.value.homeName 
+        : state.value.awayName;
+});
+
 </script>
 
 <template>
@@ -63,12 +77,34 @@ const gameStatus = computed(() => {
         <!-- Conectado -->
         <div v-else>
             <p>Conectado!</p>
-            <p>Status: {{ gameStatus }}</p>
+
+            <!-- Team showoff -->
+            <div v-if="state.status === 'waiting'">
+                <p>Os times que irão disputar são:</p>
+                <p>{{ state.homeName }}</p>
+                <p>{{ state.awayName }}</p>
+            </div>
+
+            <!-- Voting -->
+            <div v-if="state.status === 'running'">
+                <p>Vote no seu time favorito:</p>
+                <button @click="vote('home')" :disabled="state.status !== 'running'">Vote {{ state.homeName }}</button>
+                <button @click="vote('away')" :disabled="state.status !== 'running'">Vote {{ state.awayName }}</button>
+            </div>
+
+            <!-- Winner screen -->
+            <div v-if="state.status === 'finished'">
+                <p>Resultado final:</p>
+                <p>{{ state.homeName }} {{ state.homeVotes }} x {{ state.awayVotes }} {{ state.awayName }}</p>
+                <p>Time vencedor: {{ gameWinner }}</p>
+            </div>
+
+            <!-- <p>Status: {{ gameStatus }}</p>
             <p>Time casa: {{ state.homeName }}</p>
             <p>Time visitante: {{ state.awayName }}</p>
             <p>{{ state.homeVotes }} x {{ state.awayVotes }}</p>
             <button @click="vote('home')" :disabled="state.status !== 'running'">Vote {{ state.homeName }}</button>
-            <button @click="vote('away')" :disabled="state.status !== 'running'">Vote {{ state.awayName }}</button>
+            <button @click="vote('away')" :disabled="state.status !== 'running'">Vote {{ state.awayName }}</button> -->
         </div>
     </div>  
 </template>
