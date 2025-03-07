@@ -1,3 +1,5 @@
+import tailwindcss from "@tailwindcss/vite";
+
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
@@ -5,6 +7,14 @@ export default defineNuxtConfig({
       PUSHER_APP_CLUSTER: process.env.NUXT_PUBLIC_PUSHER_APP_CLUSTER
     }
   },
+
+  vite: {
+    plugins: [
+      tailwindcss(),
+    ]
+  },
+
+  css: ['~/assets/css/main.css'],
 
   compatibilityDate: "2025-03-03",
 })
