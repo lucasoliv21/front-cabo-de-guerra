@@ -14,6 +14,21 @@ const vote = (team) => {
     websocket.value.send(`vote-${team}`);
 };
 
+const scoreboard = computed(() => {
+  const entries = Object.entries(state.value.stats);
+  
+  entries.sort((a, b) => b[1].winRate - a[1].winRate);
+
+  return entries.slice(0, 5).map(([teamName, stats]) => {
+    return {
+      teamName,
+      winRate: stats.winRate,
+      played: stats.played,
+      won: stats.won,
+    };
+  });
+});
+
 onMounted(() => {
     const ws = new WebSocket('ws://localhost:9502');
 
@@ -91,6 +106,14 @@ const gameWinner = computed(() => {
 
         <!-- Conectado -->
         <div v-else>
+            <div class="absolute top-0 right-0 m-4 p-2 bg-white border rounded shadow">
+              <h3 class="font-bold text-lg">Top 5 Win Rates</h3>
+              <ul>
+                <li v-for="(item, index) in scoreboard" :key="index" class="text-sm">
+                  {{ index + 1 }}. {{ item.teamName }} - {{ (item.winRate * 100).toFixed(2) }}%
+                </li>
+              </ul>
+            </div>
             <p class="absolute bg-green-500 top-5 left-5 rounded-md text-xs p-1 text-white uppercase font-bold select-none">Conectado</p>
 
             <!-- Team showoff -->
