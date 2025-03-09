@@ -339,8 +339,8 @@ const gameWinner = computed(() => {
                         </div>
 
                         <div class="flex gap-5 justify-around items-center">
-                            <button @click="vote('home')" :disabled="state.game.status !== 'running'" class="bg-blue-500 text-white cursor-pointer p-2 rounded-md">Vote {{ state.homeName }}</button>
-                            <button @click="vote('away')" :disabled="state.game.status !== 'running'" class="bg-blue-500 text-white cursor-pointer p-2 rounded-md">Vote {{ state.awayName }}</button>
+                            <button @click="vote('home')" :disabled="state.game.status !== 'running'" class="bg-blue-500 hover:bg-blue-700 active:bg-blue-800 text-white cursor-pointer p-2 rounded-md select-none">Vote {{ state.homeName }}</button>
+                            <button @click="vote('away')" :disabled="state.game.status !== 'running'" class="bg-blue-500 hover:bg-blue-700 active:bg-blue-800 text-white cursor-pointer p-2 rounded-md select-none">Vote {{ state.awayName }}</button>
                         </div>
                     </div>
                     
