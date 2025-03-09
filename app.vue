@@ -8,3 +8,9 @@ import { NuxtPage } from '#components';
     <NuxtPage />
   </div>
 </template>
+
+<style>
+canvas {
+  pointer-events: none;
+}
+</style>
