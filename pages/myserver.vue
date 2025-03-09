@@ -31,11 +31,23 @@ watch(
 
         console.log(`I did a confetti! ${newState} > ${oldState}`);
 
+        const angle = Math.floor(Math.random() * 80) - 40;
+
+        let confettiCount = 1
+        
+        if (newState % 1000 === 0) {
+            confettiCount = 1000;
+        } else if (newState % 100 === 0) {
+            confettiCount = 100;
+        } else if (newState % 10 === 0) {
+            confettiCount = 10;
+        }
+
         // confetti from left
         $confetti({
-            particleCount: 1,
+            particleCount: confettiCount,
             spread: 70,
-            angle: 0,
+            angle: angle,
             origin: { x: 0 },
             scalar: 2,
             shapes: ["image"],
@@ -73,11 +85,25 @@ watch(
 
         console.log(`I did a confetti because away votes increased from ${oldState} to ${newState}`);
 
+
+        // angle between 140 and 220
+        const angle = Math.floor(Math.random() * 80) + 140;
+
+        let confettiCount = 1
+        
+        if (newState % 1000 === 0) {
+            confettiCount = 1000;
+        } else if (newState % 100 === 0) {
+            confettiCount = 100;
+        } else if (newState % 10 === 0) {
+            confettiCount = 10;
+        }
+
         // confetti from right
         $confetti({
-            particleCount: 1,
+            particleCount: confettiCount,
             spread: 70,
-            angle: 180,
+            angle: angle,
             scalar: 2,
             origin: { x: 1 },
             shapes: ["image"],
