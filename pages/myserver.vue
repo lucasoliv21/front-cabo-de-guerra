@@ -33,10 +33,11 @@ watch(
 
         // confetti from left
         $confetti({
-            particleCount: 100,
+            particleCount: 1,
             spread: 70,
             angle: 0,
             origin: { x: 0 },
+            scalar: 2,
             shapes: ["image"],
             shapeOptions: {
                 image: {
@@ -74,9 +75,10 @@ watch(
 
         // confetti from right
         $confetti({
-            particleCount: 100,
+            particleCount: 1,
             spread: 70,
             angle: 180,
+            scalar: 2,
             origin: { x: 1 },
             shapes: ["image"],
             shapeOptions: {
