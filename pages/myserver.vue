@@ -25,6 +25,12 @@ watch(
             return;
         }
 
+        if (typeof oldState === 'undefined') {
+            return;
+        }
+
+        console.log(`I did a confetti! ${newState} > ${oldState}`);
+
         // confetti from left
         $confetti({
             particleCount: 100,
@@ -59,6 +65,12 @@ watch(
         if (newState <= oldState) {
             return;
         }
+
+        if (typeof oldState === 'undefined') {
+            return;
+        }
+
+        console.log(`I did a confetti because away votes increased from ${oldState} to ${newState}`);
 
         // confetti from right
         $confetti({
