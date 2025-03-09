@@ -1,11 +1,132 @@
 <script setup>
 
+const { $confetti } = useNuxtApp();
+
 const connection = ref('pending');
 
 const state = ref({
   game: {},
   stats: {}, 
 });
+
+// Confeti on home vote
+watch(
+    () => state.value.game.homeVotes,
+    (newState, oldState) => {
+        if (newState === oldState) {
+            return;
+        }
+
+        if (state.value.game.status !== 'running') {
+            return;
+        }
+
+        if (newState <= oldState) {
+            return;
+        }
+
+        // confetti from left
+        $confetti({
+            particleCount: 100,
+            spread: 70,
+            angle: 0,
+            origin: { x: 0 },
+            shapes: ["image"],
+            shapeOptions: {
+                image: {
+                    src: state.value.game.homeFlag,
+                    replaceColor: true,
+                    width: 32,
+                    height: 40,
+                },
+            },
+        });
+    }
+)
+
+// Confeti on away vote
+watch(
+    () => state.value.game.awayVotes,
+    (newState, oldState) => {
+        if (newState === oldState) {
+            return;
+        }
+
+        if (state.value.game.status !== 'running') {
+            return;
+        }
+
+        if (newState <= oldState) {
+            return;
+        }
+
+        // confetti from right
+        $confetti({
+            particleCount: 100,
+            spread: 70,
+            angle: 180,
+            origin: { x: 1 },
+            shapes: ["image"],
+            shapeOptions: {
+                image: {
+                    src: state.value.game.awayFlag,
+                    replaceColor: true,
+                    width: 32,
+                    height: 40,
+                },
+            },
+        });
+    }
+)
+
+// Confeti on winner
+watch(
+    () => state.value.game.status,
+    (newState, oldState) => {
+        if (newState === oldState) {
+            return;
+        }
+
+        if (newState !== 'finished') {
+            return;
+        }
+
+        // Se o jogo empatou, não dispara confeti
+        if (state.value.game.homeVotes === state.value.game.awayVotes) {
+            return;
+        }
+
+        const defaults = {
+            spread: 360,
+            ticks: 50,
+            gravity: 0,
+            decay: 0.94,
+            startVelocity: 30,
+            shapes: ["star"],
+            colors: ["FFD700", "FFDF00"],
+        };
+
+        function shoot() {
+            confetti({
+                ...defaults,
+                particleCount: 40,
+                scalar: 1.2,
+                shapes: ["star"],
+            });
+
+            confetti({
+                ...defaults,
+                particleCount: 10,
+                scalar: 0.75,
+                shapes: ["star"],
+            });
+        }
+
+        setTimeout(shoot, 0);
+        setTimeout(shoot, 100);
+        setTimeout(shoot, 200);
+    }
+)
 
 // @TODO - Resolver essa gambiarra pro jogo ter acesos a ref websocket
 const websocket = ref(null);
@@ -30,6 +151,7 @@ const scoreboard = computed(() => {
 });
 
 onMounted(() => {
+
     const ws = new WebSocket('ws://localhost:9502');
 
     websocket.value = ws;
@@ -50,8 +172,6 @@ onMounted(() => {
       if (data.stats) {
         state.value.stats = data.stats;
       }
-
-      console.log(state.value.game.status);
     };
 
     ws.onclose = function() {
