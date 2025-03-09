@@ -9,6 +9,9 @@ const state = ref({
   stats: {}, 
 });
 
+// top 5 toggle
+const top5 = ref(true);
+
 // Confeti on home vote
 watch(
     () => state.value.game.homeVotes,
@@ -266,14 +269,27 @@ const gameWinner = computed(() => {
 
         <!-- Conectado -->
         <div v-else>
-            <div class="absolute top-0 right-0 m-4 p-2 bg-white border rounded shadow">
-              <h3 class="font-bold text-lg">Top 5 Win Rates</h3>
-              <ul>
-                <li v-for="(item, index) in scoreboard" :key="index" class="text-sm">
-                  {{ index + 1 }}. {{ item.teamName }} - {{ (item.winRate * 100).toFixed(2) }}%
-                </li>
-              </ul>
+
+            <!-- Table: Top 5 Win Rates -->
+            <div class="absolute top-0 right-0 m-4 bg-white border rounded shadow transition-all duration-1000 ease-in-out">
+
+                <!-- Header Table-->
+                <div @click="top5 = !top5" class="flex p-1 bg-blue-200 rounded-t justify-between items-center">
+                    <p class="font-bold text-sm">Top 5 Win Rates</p>
+                    <span v-show="top5">✖</span>
+                    <span v-show="!top5">➕</span>
+                </div>
+
+                <!-- Body Table: add transition tailwind -->
+                <div :class="[top5 ? 'h-30' : 'h-0 opacity-0']" class="transition-all duration-1000 ease-in-out">
+                    <ul>
+                        <li v-for="(item, index) in scoreboard" :key="index" class="text-sm px-2 py-0.5">
+                            {{ index + 1 }}. {{ item.teamName }} - {{ (item.winRate * 100).toFixed(2) }}%
+                        </li>
+                    </ul>
+                </div>
             </div>
+
             <p class="absolute bg-green-500 top-5 left-5 rounded-md text-xs p-1 text-white uppercase font-bold select-none">Conectado</p>
 
             <!-- Team showoff -->
