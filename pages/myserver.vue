@@ -274,7 +274,7 @@ const gameWinner = computed(() => {
             <div class="absolute top-0 right-0 m-4 bg-white border rounded shadow transition-all duration-1000 ease-in-out">
 
                 <!-- Header Table-->
-                <div @click="top5 = !top5" class="flex p-1 bg-blue-200 rounded-t justify-between items-center">
+                <div @click="top5 = !top5" class="flex p-1 cursor-pointer bg-blue-200 rounded-t justify-between items-center">
                     <p class="font-bold text-sm">Top 5 Win Rates</p>
                     <span v-show="top5">✖</span>
                     <span v-show="!top5">➕</span>
