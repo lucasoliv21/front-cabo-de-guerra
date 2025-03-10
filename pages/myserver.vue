@@ -301,7 +301,7 @@ const gameWinner = computed(() => {
                             
                             <!-- Home -->
                             <div class="w-1/3">
-                                <img :src="state.game.homeFlag" alt="home" class="w-20 h-20 mx-auto">
+                                <img :src="state.game.homeFlag" alt="home" class="w-20 animate-pulse h-20 mx-auto">
                                 <p class="text-center">{{ state.game.homeName }}</p>
                             </div>
 
@@ -311,7 +311,7 @@ const gameWinner = computed(() => {
 
                             <!-- Away -->
                             <div class="w-1/3">
-                                <img :src="state.game.awayFlag" alt="home" class="w-20 h-20 mx-auto">
+                                <img :src="state.game.awayFlag" alt="home" class="w-20 animate-pulse h-20 mx-auto">
                                 <p class="text-center">{{ state.game.awayName }}</p>
                             </div>
 
@@ -338,7 +338,7 @@ const gameWinner = computed(() => {
                             
                             <!-- Home -->
                             <div class="w-1/3">
-                                <img :src="state.game.homeFlag" alt="home" class="w-20 h-20 mx-auto">
+                                <img :src="state.game.homeFlag" alt="home" class="w-20 animate-bounce h-20 mx-auto">
                                 <p class="text-center">{{ state.game.homeName }}</p>
                             </div>
 
@@ -348,7 +348,7 @@ const gameWinner = computed(() => {
 
                             <!-- Away -->
                             <div class="w-1/3">
-                                <img :src="state.game.awayFlag" alt="home" class="w-20 h-20 mx-auto">
+                                <img :src="state.game.awayFlag" alt="home" class="w-20 animate-bounce h-20 mx-auto">
                                 <p class="text-center">{{ state.game.awayName }}</p>
                             </div>
 
@@ -371,10 +371,13 @@ const gameWinner = computed(() => {
                         <div class="flex w-full gap-5 justify-around items-center">
                             
                             <!-- Home -->
-                            <div :class="{'bg-black/5': gameWinner === state.game.homeName}" class="w-1/3 flex py-2 rounded-lg flex-col items-center">
+                            <div :class="{'bg-black/5 animate-pulse': gameWinner === state.game.homeName}" class="w-1/3 flex py-2 rounded-lg flex-col items-center">
                                 <p class="text-7xl">{{ state.game.homeVotes }}</p>
                                 <br>
-                                <img :src="state.game.homeFlag" alt="home" class="w-20 h-20 mx-auto">
+                                <div class="relative">
+                                    <img :src="state.game.homeFlag" alt="home" class="w-20 h-20 mx-auto">
+                                    <img :class="{'animate-ping': gameWinner === state.game.homeName}" :src="state.game.homeFlag" alt="home" class="absolute top-0 left-0 w-20 h-20 mx-auto">
+                                </div>
                                 <p class="text-center">{{ state.game.homeName }}</p>
                                 <p v-if="state.stats[state.game.homeName]">
                                     Win Rate: 
@@ -390,7 +393,10 @@ const gameWinner = computed(() => {
                             <div :class="{'bg-black/5': gameWinner === state.game.awayName}" class="w-1/3 flex py-2 rounded-lg flex-col items-center">
                                 <p class="text-7xl">{{ state.game.awayVotes }}</p>
                                 <br>
-                                <img :src="state.game.awayFlag" alt="home" class="w-20 h-20 mx-auto">
+                                <div class="relative">
+                                    <img :src="state.game.awayFlag" alt="away" class="w-20 h-20 mx-auto">
+                                    <img :class="{'animate-ping': gameWinner === state.game.awayName}" :src="state.game.awayFlag" alt="away-2" class="absolute top-0 left-0 w-20 h-20 mx-auto">
+                                </div>
                                 <p class="text-center">{{ state.game.awayName }}</p>
                                 <p v-if="state.stats[state.game.awayName]">
                                     Win Rate: 
