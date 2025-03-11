@@ -17,4 +17,10 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   compatibilityDate: "2025-03-03",
   modules: [],
+
+  devtools: {
+    enabled: true,
+  },
+
+  sourcemap: true,
 })
