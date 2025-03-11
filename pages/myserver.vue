@@ -294,7 +294,7 @@ const gameWinner = computed(() => {
 
             <!-- Team showoff -->
             <div v-if="state.game.status === 'waiting'">
-                <div class="flex flex-col justify-center items-center bg-gradient-to-b from-[#8B5A2B] via-[#A97142] to-[#5C4033] min-h-screen">
+                <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-b from-[#8B5A2B] via-[#A97142] to-[#5C4033] min-h-screen">
                     <div class="bg-white container items-center mx-2 p-2 gap-4 rounded flex flex-col">
                         <p class="font-bold text-4xl text-center">Próximo confronto:</p>
                         <div class="flex w-full gap-5 justify-around items-center">
@@ -322,7 +322,7 @@ const gameWinner = computed(() => {
                         </div>
                     </div>
                     
-                    
+                    <GameHistory />
                     <!-- <p>Os times que irão disputar são:</p>
                     <p>{{ state.homeName }}</p>
                     <p>{{ state.awayName }}</p> -->
@@ -331,7 +331,7 @@ const gameWinner = computed(() => {
 
             <!-- Voting -->
             <div v-if="state.game.status === 'running'">
-                <div class="flex flex-col justify-center items-center bg-gradient-to-b from-[#4CAF50] via-[#388E3C] to-[#1B5E20] min-h-screen">
+                <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-b from-[#4CAF50] via-[#388E3C] to-[#1B5E20] min-h-screen">
                     <div class="bg-white container items-center mx-2 p-2 gap-4 rounded flex flex-col">
                         <p class="font-bold text-center text-4xl">Vote no seu time favorito:</p>
                         <div class="flex w-full gap-5 justify-around items-center">
@@ -360,12 +360,13 @@ const gameWinner = computed(() => {
                         </div>
                     </div>
                     
+                    <GameHistory />
                 </div>
             </div>
 
             <!-- Winner screen -->
             <div v-if="state.game.status === 'finished'">
-                <div class="flex flex-col justify-center items-center bg-gradient-to-r from-[#FFD700] via-[#FFC107] to-[#B8860B] min-h-screen">
+                <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-r from-[#FFD700] via-[#FFC107] to-[#B8860B] min-h-screen">
                     <div class="bg-white container items-center mx-2 p-2 gap-4 rounded flex flex-col">
                         <p class="font-bold text-center text-4xl">Vencedor da Rodada</p>
                         <div class="flex w-full gap-5 justify-around items-center">
@@ -411,6 +412,7 @@ const gameWinner = computed(() => {
                         </div>
                     </div>
                     
+                    <GameHistory />
                 </div>
             </div>
 
