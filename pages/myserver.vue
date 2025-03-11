@@ -216,6 +216,10 @@ onMounted(() => {
       if (data.stats) {
         state.value.stats = data.stats;
       }
+
+      if (data.history) {
+        state.value.gameHistory = data.history;
+      }
     };
 
     ws.onclose = function() {
