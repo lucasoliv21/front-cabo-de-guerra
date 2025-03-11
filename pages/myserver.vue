@@ -180,18 +180,17 @@ const vote = (team) => {
 };
 
 const scoreboard = computed(() => {
-  const entries = Object.entries(state.value.stats);
-  
-  entries.sort((a, b) => b[1].winRate - a[1].winRate);
+  let entries = Object.entries(state.value.stats);
 
-  return entries.slice(0, 5).map(([teamName, stats]) => {
-    return {
-      teamName,
-      winRate: stats.winRate,
-      played: stats.played,
-      won: stats.won,
-    };
-  });
+  entries = entries.filter(([teamName, stats]) => stats.played > 0 && stats.winRate > 0); //nao vamos mostrar times que nao jogaram e nao ganharam
+  entries.sort((a, b) => b[1].winRate - a[1].winRate);
+  // Retorna os 5 primeiros
+  return entries.slice(0, 5).map(([teamName, stats]) => ({
+    teamName,
+    winRate: stats.winRate,
+    played: stats.played,
+    won: stats.won,
+  }));
 });
 
 onMounted(() => {
@@ -287,11 +286,20 @@ const gameWinner = computed(() => {
 
                 <!-- Body Table: add transition tailwind -->
                 <div :class="[top5 ? 'h-30' : 'h-0 opacity-0']" class="transition-all duration-1000 ease-in-out">
-                    <ul>
-                        <li v-for="(item, index) in scoreboard" :key="index" class="text-sm px-2 py-0.5">
-                            {{ index + 1 }}. {{ item.teamName }} - {{ (item.winRate * 100).toFixed(2) }}%
-                        </li>
-                    </ul>
+                  <!-- Se scoreboard estiver vazio, mostra a mensagem -->
+                  <div v-if="scoreboard.length === 0">
+                    <p class="text-sm px-2 py-1">Nenhum time jogou ainda...</p>
+                  </div>
+                  <!-- Caso contrário, exibe a lista -->
+                  <ul v-else>
+                    <li
+                      v-for="(item, index) in scoreboard"
+                      :key="index"
+                      class="text-sm px-2 py-0.5"
+                    >
+                      {{ index + 1 }}. {{ item.teamName }} - {{ (item.winRate * 100).toFixed(2) }}%
+                    </li>
+                  </ul>
                 </div>
             </div>
 
