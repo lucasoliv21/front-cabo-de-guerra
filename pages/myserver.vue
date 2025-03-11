@@ -7,6 +7,7 @@ const connection = ref('pending');
 const state = ref({
   game: {},
   stats: {}, 
+  gameHistory: [],
 });
 
 // top 5 toggle
@@ -322,7 +323,7 @@ const gameWinner = computed(() => {
                         </div>
                     </div>
                     
-                    <GameHistory />
+                    <GameHistory :gameHistory="state.gameHistory" />
                     <!-- <p>Os times que irão disputar são:</p>
                     <p>{{ state.homeName }}</p>
                     <p>{{ state.awayName }}</p> -->
@@ -360,7 +361,7 @@ const gameWinner = computed(() => {
                         </div>
                     </div>
                     
-                    <GameHistory />
+                    <GameHistory :gameHistory="state.gameHistory" />
                 </div>
             </div>
 
@@ -412,7 +413,7 @@ const gameWinner = computed(() => {
                         </div>
                     </div>
                     
-                    <GameHistory />
+                    <GameHistory :gameHistory="state.gameHistory" />
                 </div>
             </div>
 
