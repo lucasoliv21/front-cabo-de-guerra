@@ -13,6 +13,10 @@ const state = ref({
 // top 5 toggle
 const top5 = ref(true);
 
+const timeLeft = ref(0);
+
+let timerInterval = null;
+
 // Confeti on home vote
 watch(
     () => state.value.game.homeVotes,
@@ -211,6 +215,7 @@ onMounted(() => {
 
       if (data.game) {
         state.value.game = data.game;
+        updateTimer();
       }
       if (data.stats) {
         state.value.stats = data.stats;
@@ -230,7 +235,13 @@ onMounted(() => {
         console.error('Erro:', err);
         connection.value = 'disconnected';
     };
+    
+    timerInterval = setInterval(updateTimer, 1000);
 })
+
+onUnmounted(() => {
+  clearInterval(timerInterval);
+});
 
 const gameStatus = computed(() => {
   const status = state.value.game?.status;
@@ -255,6 +266,18 @@ const gameWinner = computed(() => {
     ? state.value.game.homeName
     : state.value.game.awayName;
 });
+
+function updateTimer() {
+
+  if (state.value.game.phaseStart && state.value.game.phaseDuration) {
+    const now = Math.floor(Date.now() / 1000);
+    const elapsed = now - state.value.game.phaseStart;
+
+    timeLeft.value = Math.max(state.value.game.phaseDuration - elapsed, 0);
+  } else {
+    timeLeft.value = 0;
+  }
+}
 
 </script>
 
@@ -304,7 +327,9 @@ const gameWinner = computed(() => {
             </div>
 
             <p class="absolute bg-green-500 top-5 left-5 rounded-md text-xs p-1 text-white uppercase font-bold select-none">Conectado</p>
-
+            <div class="absolute top-2 left-1/2 transform -translate-x-1/2 bg-black/60 text-white px-3 py-1 rounded text-base z-50">
+              Tempo restante: {{ timeLeft }} s
+            </div>
             <!-- Team showoff -->
             <div v-if="state.game.status === 'waiting'">
                 <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-b from-[#8B5A2B] via-[#A97142] to-[#5C4033] min-h-screen">
