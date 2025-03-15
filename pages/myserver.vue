@@ -311,7 +311,7 @@ function updateTimer() {
                 <div :class="[top5 ? 'h-30' : 'h-0 opacity-0']" class="transition-all duration-1000 ease-in-out">
                   <!-- Se scoreboard estiver vazio, mostra a mensagem -->
                   <div v-if="scoreboard.length === 0">
-                    <p class="text-sm px-2 py-1">Nenhum time jogou ainda...</p>
+                    <p class="text-sm px-2 py-1">Nenhuma vitória registrada!</p>
                   </div>
                   <!-- Caso contrário, exibe a lista -->
                   <ul v-else>
