@@ -8,12 +8,14 @@ const props = defineProps({
 </script>
 
 <template>
-    <div v-if="props.gameHistory.length > 0" class="flex container bg-white py-1 w-full rounded scrollbar-hide overflow-auto">
+    <div v-if="props.gameHistory.length > 0" class="flex container bg-white py-1 w-full rounded scrollbar-hide">
 
         <!-- Grid scroll -->
-        <div class="flex flex-shrink-0 gap-1 first:ml-1 last:mr-1">
+        <div class="flex flex-shrink-0 overflow-visible gap-1 first:ml-1 last:mr-1">
 
-            <GameHistoryItem v-for="game in gameHistory" :key="game.id" :game="game" />
+            <GameHistoryTooltip v-for="game in gameHistory" :key="game.id" :game="game">
+                <GameHistoryItem :game="game" />
+            </GameHistoryTooltip>
 
         </div>
     </div>

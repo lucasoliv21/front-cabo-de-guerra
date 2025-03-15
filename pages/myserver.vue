@@ -360,7 +360,10 @@ function updateTimer() {
                         </div>
                     </div>
                     
-                    <GameHistory :gameHistory="state.gameHistory" />
+                    <KeepAlive>
+                        <GameHistory :gameHistory="state.gameHistory" />
+                    </KeepAlive>
+                    
                     <!-- <p>Os times que irão disputar são:</p>
                     <p>{{ state.homeName }}</p>
                     <p>{{ state.awayName }}</p> -->
@@ -398,7 +401,9 @@ function updateTimer() {
                         </div>
                     </div>
                     
-                    <GameHistory :gameHistory="state.gameHistory" />
+                    <KeepAlive>
+                        <GameHistory :gameHistory="state.gameHistory" />
+                    </KeepAlive>
                 </div>
             </div>
 
@@ -450,7 +455,9 @@ function updateTimer() {
                         </div>
                     </div>
                     
-                    <GameHistory :gameHistory="state.gameHistory" />
+                    <KeepAlive>
+                        <GameHistory :gameHistory="state.gameHistory" />
+                    </KeepAlive>
                 </div>
             </div>
 
