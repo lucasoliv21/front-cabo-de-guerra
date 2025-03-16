@@ -180,6 +180,12 @@ watch(
 const websocket = ref(null);
 
 const vote = (team) => {
+    
+    if (state.value.game.status !== 'running') {
+      console.log("Votação só pode ocorrer na fase 'running'.");
+      return;
+    }
+    
     websocket.value.send(`vote-${team}`);
 };
 
