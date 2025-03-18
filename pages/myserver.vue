@@ -1,4 +1,5 @@
 <script setup>
+import { ulid } from 'ulid';
 
 const { $confetti } = useNuxtApp();
 
@@ -203,9 +204,21 @@ const scoreboard = computed(() => {
   }));
 });
 
-onMounted(() => {
+const getToken = () => {
+    let token = localStorage.getItem('user-token');
 
-    const ws = new WebSocket('ws://localhost:9502');
+    if (! token) {
+        token = ulid();
+        localStorage.setItem('user-token', token);
+    }
+
+    return token;
+}
+
+onMounted(() => {
+    const userToken = getToken();
+
+    const ws = new WebSocket(`ws://localhost:9502/${userToken}`);
 
     websocket.value = ws;
 
