@@ -304,7 +304,7 @@ function updateTimer() {
     <div>
         <div v-if="connection === 'disconnected'">
             <p class="absolute bg-red-500 top-5 left-5 rounded-md text-xs p-1 text-white uppercase font-bold select-none">
-                Erro de conexão! Atualize a página.
+                Erro de conexão! Atualize a página e verifique se o jogo está aberto em outra aba.
             </p>
         </div>
         <div v-else-if="connection === 'pending'">
