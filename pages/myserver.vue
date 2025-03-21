@@ -5,6 +5,32 @@ const { $confetti } = useNuxtApp();
 
 const connection = ref('pending');
 
+useHead({
+    title: 'Gol de Habilidade - Check Goal',
+    // add favicon svg
+    link: [
+        {
+            rel: 'icon',
+            type: 'image/svg+xml',
+            href: '/favicon.svg',
+        },
+    ],
+    meta: [
+        {
+            name: 'description',
+            content: 'Gol de Habilidade é um jogo de click online onde o objetivo é mostrar suas habilidades para fazer gols incríveis. Experimente e divirta-se marcando gols espetaculares!',
+        },
+        {
+            name: 'keywords',
+            content: 'gol, habilidade, click, online, jogo, futebol, gol de habilidade, check goal, futebol, esportes, diversao',
+        },
+        {
+            name: 'author',
+            content: 'Lucas César e Arthur Henrique',
+        }
+    ],
+});
+
 const state = ref({
   game: {},
   stats: {}, 
