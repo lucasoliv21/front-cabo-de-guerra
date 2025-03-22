@@ -35,6 +35,7 @@ const state = ref({
   game: {},
   stats: {}, 
   gameHistory: [],
+  player: {},
 });
 
 // top 5 toggle
@@ -63,8 +64,6 @@ watch(
         if (typeof oldState === 'undefined') {
             return;
         }
-
-        console.log(`I did a confetti! ${newState} > ${oldState}`);
 
         const angle = Math.floor(Math.random() * 80) - 40;
 
@@ -117,9 +116,6 @@ watch(
         if (typeof oldState === 'undefined') {
             return;
         }
-
-        console.log(`I did a confetti because away votes increased from ${oldState} to ${newState}`);
-
 
         // angle between 140 and 220
         const angle = Math.floor(Math.random() * 80) + 140;
@@ -206,6 +202,15 @@ watch(
 // @TODO - Resolver essa gambiarra pro jogo ter acesos a ref websocket
 const websocket = ref(null);
 
+const selectTeam = (team) => {
+    if (state.value.game.status !== 'waiting') {
+      console.log("Seleção de time só pode ocorrer na fase 'waiting'.");
+      return;
+    }
+    
+    websocket.value.send(`select-${team}`);
+};
+
 const vote = (team) => {
     
     if (state.value.game.status !== 'running') {
@@ -215,6 +220,18 @@ const vote = (team) => {
     
     websocket.value.send(`vote-${team}`);
 };
+
+const playerTeamIsSelected = computed(() => {
+    return state.value.player.currentTeam !== null;
+});
+
+const playerTeamIsHome = computed(() => {
+    return state.value.player.currentTeam === state.value.game.homeName;
+});
+
+const playerTeamIsAway = computed(() => {
+    return state.value.player.currentTeam === state.value.game.awayName;
+});
 
 const scoreboard = computed(() => {
   let entries = Object.entries(state.value.stats);
@@ -268,6 +285,10 @@ onMounted(() => {
 
       if (data.history) {
         state.value.gameHistory = data.history;
+      }
+
+      if (data.player) {
+        state.value.player = data.player;
       }
     };
 
@@ -379,13 +400,22 @@ function updateTimer() {
             <div v-if="state.game.status === 'waiting'">
                 <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-b from-[#8B5A2B] via-[#A97142] to-[#5C4033] min-h-screen">
                     <div class="bg-white container items-center mx-2 p-2 gap-4 rounded flex flex-col">
-                        <p class="font-bold text-4xl text-center">Próximo confronto:</p>
+                        <p class="font-bold text-4xl text-center">Escolha seu time:</p>
                         <div class="flex w-full gap-5 justify-around items-center">
                             
                             <!-- Home -->
-                            <div class="w-1/3">
-                                <img :src="state.game.homeFlag" alt="home" class="w-20 animate-pulse h-20 mx-auto">
-                                <p class="text-center">{{ state.game.homeName }}</p>
+                            <div
+                                @click="selectTeam('home')"
+                                :class="[playerTeamIsSelected && playerTeamIsHome ? 'bg-emerald-400' : 'bg-slate-100 hover:bg-slate-300']"
+                                class="w-1/3 cursor-pointer group rounded-lg flex gap-2 py-2 flex-col items-center"
+                                >
+                                <img 
+                                    :src="state.game.homeFlag" 
+                                    alt="home" 
+                                    :class="[playerTeamIsSelected && playerTeamIsHome ? 'animate-none' : 'animate-pulse group-hover:animate-none']"
+                                    class="w-20 h-20 mx-auto"
+                                    >
+                                <p class="text-center font-bold flex gap-1"><span :class="[playerTeamIsHome ? 'hidden' : 'group-hover:block hidden']">Escolher </span>{{ state.game.homeName }}</p>
                             </div>
 
                             <!-- VS -->
@@ -393,9 +423,18 @@ function updateTimer() {
 
 
                             <!-- Away -->
-                            <div class="w-1/3">
-                                <img :src="state.game.awayFlag" alt="home" class="w-20 animate-pulse h-20 mx-auto">
-                                <p class="text-center">{{ state.game.awayName }}</p>
+                            <div
+                                @click="selectTeam('away')"
+                                :class="[playerTeamIsSelected && playerTeamIsAway ? 'bg-emerald-400' : 'bg-slate-100 hover:bg-slate-300']"
+                                class="w-1/3 cursor-pointer group rounded-lg flex gap-2 py-2 flex-col items-center"
+                                >
+                                <img 
+                                    :src="state.game.awayFlag" 
+                                    alt="away" 
+                                    :class="[playerTeamIsSelected && playerTeamIsAway ? 'animate-none' : 'animate-pulse group-hover:animate-none']"
+                                    class="w-20 h-20 mx-auto"
+                                    >
+                                <p class="text-center font-bold flex gap-1"><span :class="[playerTeamIsAway ? 'hidden' : 'group-hover:block hidden']">Escolher </span>{{ state.game.awayName }}</p>
                             </div>
 
                         </div>
@@ -411,6 +450,10 @@ function updateTimer() {
                     
                     <KeepAlive>
                         <GameHistory :gameHistory="state.gameHistory" />
+                    </KeepAlive>
+
+                    <KeepAlive>
+                        <GameProfile :player="state.player" :game="state.game" />
                     </KeepAlive>
                     
                     <!-- <p>Os times que irão disputar são:</p>
@@ -452,6 +495,10 @@ function updateTimer() {
                     
                     <KeepAlive>
                         <GameHistory :gameHistory="state.gameHistory" />
+                    </KeepAlive>
+
+                    <KeepAlive>
+                        <GameProfile :player="state.player" :game="state.game" />
                     </KeepAlive>
                 </div>
             </div>
@@ -506,6 +553,10 @@ function updateTimer() {
                     
                     <KeepAlive>
                         <GameHistory :gameHistory="state.gameHistory" />
+                    </KeepAlive>
+
+                    <KeepAlive>
+                        <GameProfile :player="state.player" :game="state.game" />
                     </KeepAlive>
                 </div>
             </div>
