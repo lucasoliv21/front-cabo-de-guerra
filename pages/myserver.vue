@@ -389,7 +389,7 @@ function updateTimer() {
                             </div>
 
                             <!-- VS -->
-                             <p>vs.</p>
+                             <p class="lg:text-lg">vs.</p>
 
 
                             <!-- Away -->
@@ -400,9 +400,13 @@ function updateTimer() {
 
                         </div>
 
-                        <div class="flex cursor-wait grow w-full gap-5 p-2 bg-blue-800 text-white rounded justify-around items-center">
+                        <!-- <div> -->
+                            <GameProgressBar :timeLeft="timeLeft" :timeTotal="state.game.phaseDuration" />
+                        <!-- </div> -->
+
+                        <!-- <div class="flex cursor-wait grow w-full gap-5 p-2  text-black rounded justify-around items-center">
                             Votação inicia em breve...
-                        </div>
+                        </div> -->
                     </div>
                     
                     <KeepAlive>
