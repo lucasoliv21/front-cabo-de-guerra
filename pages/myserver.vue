@@ -233,6 +233,13 @@ const playerTeamIsAway = computed(() => {
     return state.value.player.currentTeam === state.value.game.awayName;
 });
 
+const playerHasWon = computed(() => {
+    const teamWinner = gameWinner.value;
+
+    return state.value.player.currentTeam === teamWinner 
+        || state.value.player.currentTeam === teamWinner;
+});
+
 const scoreboard = computed(() => {
   let entries = Object.entries(state.value.stats);
 
@@ -483,9 +490,17 @@ function updateTimer() {
                         <div class="flex w-full gap-5 justify-around items-center">
                             
                             <!-- Home -->
-                            <div class="w-1/3">
+                            <div 
+                                class="w-1/3 rounded"
+                                >
                                 <img :src="state.game.homeFlag" alt="home" class="w-20 animate-bounce h-20 mx-auto">
-                                <p class="text-center">{{ state.game.homeName }}</p>
+                                <p class="text-center">
+                                    <span 
+                                        :class="[playerTeamIsSelected && playerTeamIsHome ? 'bg-gradient-to-b from-[#F7971E] to-[#FFD200] font-bold' : '']"
+                                        class="p-0.5 rounded text-xs"
+                                        >{{ state.game.homeName }}
+                                    </span>
+                                </p>
                             </div>
 
                             <!-- VS -->
@@ -495,7 +510,13 @@ function updateTimer() {
                             <!-- Away -->
                             <div class="w-1/3">
                                 <img :src="state.game.awayFlag" alt="home" class="w-20 animate-bounce h-20 mx-auto">
-                                <p class="text-center">{{ state.game.awayName }}</p>
+                                <p class="text-center">
+                                    <span 
+                                        :class="[playerTeamIsSelected && playerTeamIsAway ? 'bg-gradient-to-b from-[#F7971E] to-[#FFD200] font-bold' : '']"
+                                        class="p-0.5 rounded text-xs"
+                                        >{{ state.game.awayName }}
+                                    </span>
+                                </p>
                             </div>
 
                         </div>
@@ -540,7 +561,7 @@ function updateTimer() {
                                     <img :class="{'animate-ping': gameWinner === state.game.homeName}" :src="state.game.homeFlag" alt="home" class="absolute top-0 left-0 w-20 h-20 mx-auto">
                                 </div>
                                 <p class="text-center">{{ state.game.homeName }}</p>
-                                <p v-if="state.stats[state.game.homeName]">
+                                <p class="text-center" v-if="state.stats[state.game.homeName]">
                                     Win Rate: 
                                     {{ (state.stats[state.game.homeName].winRate * 100).toFixed(2) }}%
                                   </p>
@@ -559,7 +580,7 @@ function updateTimer() {
                                     <img :class="{'animate-ping': gameWinner === state.game.awayName}" :src="state.game.awayFlag" alt="away-2" class="absolute top-0 left-0 w-20 h-20 mx-auto">
                                 </div>
                                 <p class="text-center">{{ state.game.awayName }}</p>
-                                <p v-if="state.stats[state.game.awayName]">
+                                <p class="text-center" v-if="state.stats[state.game.awayName]">
                                     Win Rate: 
                                     {{ (state.stats[state.game.awayName].winRate * 100).toFixed(2) }}%
                                 </p>
@@ -567,8 +588,11 @@ function updateTimer() {
 
                         </div>
 
-                        <div class="flex cursor-wait grow w-full gap-5 p-2 bg-red-800 text-white rounded justify-around items-center">
-                            Votação encerrada! {{ gameWinner === 'Empate' ? 'Aconteceu um empate.' : `O vencedor foi ${gameWinner}!` }}
+                        <div 
+                            :class="[playerHasWon ? 'bg-green-500' : 'bg-red-800']"
+                            class="flex cursor-wait grow w-full gap-5 p-2 text-white rounded justify-around items-center"
+                            >
+                            Votação encerrada! {{ playerHasWon ? 'Você venceu!' : '' }} {{ gameWinner === 'Empate' ? 'Aconteceu um empate.' : `O vencedor foi ${gameWinner}!` }}
                         </div>
                     </div>
                     
