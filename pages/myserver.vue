@@ -65,8 +65,6 @@ watch(
             return;
         }
 
-        console.log(`I did a confetti! ${newState} > ${oldState}`);
-
         const angle = Math.floor(Math.random() * 80) - 40;
 
         let confettiCount = 1
@@ -118,9 +116,6 @@ watch(
         if (typeof oldState === 'undefined') {
             return;
         }
-
-        console.log(`I did a confetti because away votes increased from ${oldState} to ${newState}`);
-
 
         // angle between 140 and 220
         const angle = Math.floor(Math.random() * 80) + 140;
@@ -226,6 +221,18 @@ const vote = (team) => {
     websocket.value.send(`vote-${team}`);
 };
 
+const playerTeamIsSelected = computed(() => {
+    return state.value.player.currentTeam !== null;
+});
+
+const playerTeamIsHome = computed(() => {
+    return state.value.player.currentTeam === state.value.game.homeName;
+});
+
+const playerTeamIsAway = computed(() => {
+    return state.value.player.currentTeam === state.value.game.awayName;
+});
+
 const scoreboard = computed(() => {
   let entries = Object.entries(state.value.stats);
 
@@ -267,8 +274,6 @@ onMounted(() => {
 
     ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
-
-      console.log('Recebi:', data);
 
       if (data.game) {
         state.value.game = data.game;
@@ -399,9 +404,18 @@ function updateTimer() {
                         <div class="flex w-full gap-5 justify-around items-center">
                             
                             <!-- Home -->
-                            <div @click="selectTeam('home')" class="w-1/3 hover:bg-slate-300 cursor-pointer group bg-slate-100 rounded-lg flex gap-2 py-2 flex-col items-center">
-                                <img :src="state.game.homeFlag" alt="home" class="w-20 animate-pulse group-hover:animate-none h-20 mx-auto">
-                                <p class="text-center font-bold flex gap-1"><span class="group-hover:block hidden">Escolher </span>{{ state.game.homeName }}</p>
+                            <div
+                                @click="selectTeam('home')"
+                                :class="[playerTeamIsSelected && playerTeamIsHome ? 'bg-emerald-400' : 'bg-slate-100 hover:bg-slate-300']"
+                                class="w-1/3 cursor-pointer group rounded-lg flex gap-2 py-2 flex-col items-center"
+                                >
+                                <img 
+                                    :src="state.game.homeFlag" 
+                                    alt="home" 
+                                    :class="[playerTeamIsSelected && playerTeamIsHome ? 'animate-none' : 'animate-pulse group-hover:animate-none']"
+                                    class="w-20 h-20 mx-auto"
+                                    >
+                                <p class="text-center font-bold flex gap-1"><span :class="[playerTeamIsHome ? 'hidden' : 'group-hover:block hidden']">Escolher </span>{{ state.game.homeName }}</p>
                             </div>
 
                             <!-- VS -->
@@ -409,9 +423,18 @@ function updateTimer() {
 
 
                             <!-- Away -->
-                            <div @click="selectTeam('away')" class="w-1/3 hover:bg-slate-300 cursor-pointer group bg-slate-100 rounded-lg flex gap-2 py-2 flex-col items-center">
-                                <img :src="state.game.awayFlag" alt="home" class="w-20 animate-pulse group-hover:animate-none h-20 mx-auto">
-                                <p class="text-center font-bold flex gap-1"><span class="group-hover:block hidden">Escolher </span>{{ state.game.awayName }}</p>
+                            <div
+                                @click="selectTeam('away')"
+                                :class="[playerTeamIsSelected && playerTeamIsAway ? 'bg-emerald-400' : 'bg-slate-100 hover:bg-slate-300']"
+                                class="w-1/3 cursor-pointer group rounded-lg flex gap-2 py-2 flex-col items-center"
+                                >
+                                <img 
+                                    :src="state.game.awayFlag" 
+                                    alt="away" 
+                                    :class="[playerTeamIsSelected && playerTeamIsAway ? 'animate-none' : 'animate-pulse group-hover:animate-none']"
+                                    class="w-20 h-20 mx-auto"
+                                    >
+                                <p class="text-center font-bold flex gap-1"><span :class="[playerTeamIsAway ? 'hidden' : 'group-hover:block hidden']">Escolher </span>{{ state.game.awayName }}</p>
                             </div>
 
                         </div>
