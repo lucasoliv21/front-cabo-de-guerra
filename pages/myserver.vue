@@ -394,7 +394,7 @@ function updateTimer() {
 
             <p class="absolute bg-green-500 top-5 left-5 rounded-md text-xs p-1 text-white uppercase font-bold select-none">Conectado</p>
             <div class="absolute top-2 left-1/2 transform -translate-x-1/2 bg-black/60 text-white px-3 py-1 rounded text-base z-50">
-              Tempo restante: {{ timeLeft }} s
+                {{ gameStatus }}
             </div>
             <!-- Team showoff -->
             <div v-if="state.game.status === 'waiting'">
