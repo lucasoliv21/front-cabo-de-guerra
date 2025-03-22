@@ -398,7 +398,16 @@ function updateTimer() {
             </div>
             <!-- Team showoff -->
             <div v-if="state.game.status === 'waiting'">
-                <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-b from-[#8B5A2B] via-[#A97142] to-[#5C4033] min-h-screen">
+                <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-br from-[#50C9C3] to-[#96DEDA] min-h-screen">
+                    
+                    <div class="container">
+                        <GameProgressBar 
+                            :timeLeft="timeLeft"
+                            :timeTotal="state.game.phaseDuration"
+                            timeText="O evento está começando em"
+                        />
+                    </div>
+                    
                     <div class="bg-white container items-center mx-2 p-2 gap-4 rounded flex flex-col">
                         <p class="font-bold text-4xl text-center">Escolha seu time:</p>
                         <div class="flex w-full gap-5 justify-around items-center">
@@ -439,10 +448,6 @@ function updateTimer() {
 
                         </div>
 
-                        <!-- <div> -->
-                            <GameProgressBar :timeLeft="timeLeft" :timeTotal="state.game.phaseDuration" />
-                        <!-- </div> -->
-
                         <!-- <div class="flex cursor-wait grow w-full gap-5 p-2  text-black rounded justify-around items-center">
                             Votação inicia em breve...
                         </div> -->
@@ -464,7 +469,15 @@ function updateTimer() {
 
             <!-- Voting -->
             <div v-if="state.game.status === 'running'">
-                <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-b from-[#4CAF50] via-[#388E3C] to-[#1B5E20] min-h-screen">
+                <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-br from-[#50C9C3] to-[#96DEDA] min-h-screen">
+                    <div class="container">
+                        <GameProgressBar 
+                            :timeLeft="timeLeft"
+                            :timeTotal="state.game.phaseDuration"
+                            timeText="A votação acaba em"
+                        />
+                    </div>
+                    
                     <div class="bg-white container items-center mx-2 p-2 gap-4 rounded flex flex-col">
                         <p class="font-bold text-center text-4xl">Vote no seu time favorito:</p>
                         <div class="flex w-full gap-5 justify-around items-center">
@@ -505,7 +518,15 @@ function updateTimer() {
 
             <!-- Winner screen -->
             <div v-if="state.game.status === 'finished'">
-                <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-r from-[#FFD700] via-[#FFC107] to-[#B8860B] min-h-screen">
+                <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-br from-[#50C9C3] to-[#96DEDA] min-h-screen">
+                    <div class="container bg-white">
+                        <GameProgressBar 
+                            :timeLeft="timeLeft"
+                            :timeTotal="state.game.phaseDuration"
+                            timeText="Iniciando uma nova partida em"
+                        />
+                    </div>
+                    
                     <div class="bg-white container items-center mx-2 p-2 gap-4 rounded flex flex-col">
                         <p class="font-bold text-center text-4xl">Vencedor da Rodada</p>
                         <div class="flex w-full gap-5 justify-around items-center">
