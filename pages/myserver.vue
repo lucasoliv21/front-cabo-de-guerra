@@ -379,13 +379,13 @@ function updateTimer() {
             <div v-if="state.game.status === 'waiting'">
                 <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-b from-[#8B5A2B] via-[#A97142] to-[#5C4033] min-h-screen">
                     <div class="bg-white container items-center mx-2 p-2 gap-4 rounded flex flex-col">
-                        <p class="font-bold text-4xl text-center">Próximo confronto:</p>
+                        <p class="font-bold text-4xl text-center">Escolha seu time:</p>
                         <div class="flex w-full gap-5 justify-around items-center">
                             
                             <!-- Home -->
-                            <div class="w-1/3">
-                                <img :src="state.game.homeFlag" alt="home" class="w-20 animate-pulse h-20 mx-auto">
-                                <p class="text-center">{{ state.game.homeName }}</p>
+                            <div class="w-1/3 hover:bg-slate-300 cursor-pointer group bg-slate-100 rounded-lg flex gap-2 py-2 flex-col items-center">
+                                <img :src="state.game.homeFlag" alt="home" class="w-20 animate-pulse group-hover:animate-none h-20 mx-auto">
+                                <p class="text-center font-bold flex gap-1"><span class="group-hover:block hidden">Escolher </span>{{ state.game.homeName }}</p>
                             </div>
 
                             <!-- VS -->
@@ -393,9 +393,9 @@ function updateTimer() {
 
 
                             <!-- Away -->
-                            <div class="w-1/3">
-                                <img :src="state.game.awayFlag" alt="home" class="w-20 animate-pulse h-20 mx-auto">
-                                <p class="text-center">{{ state.game.awayName }}</p>
+                            <div class="w-1/3 hover:bg-slate-300 cursor-pointer group bg-slate-100 rounded-lg flex gap-2 py-2 flex-col items-center">
+                                <img :src="state.game.awayFlag" alt="home" class="w-20 animate-pulse group-hover:animate-none h-20 mx-auto">
+                                <p class="text-center font-bold flex gap-1"><span class="group-hover:block hidden">Escolher </span>{{ state.game.awayName }}</p>
                             </div>
 
                         </div>
