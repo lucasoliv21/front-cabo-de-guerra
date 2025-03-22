@@ -35,6 +35,7 @@ const state = ref({
   game: {},
   stats: {}, 
   gameHistory: [],
+  player: {},
 });
 
 // top 5 toggle
@@ -206,6 +207,15 @@ watch(
 // @TODO - Resolver essa gambiarra pro jogo ter acesos a ref websocket
 const websocket = ref(null);
 
+const selectTeam = (team) => {
+    if (state.value.game.status !== 'waiting') {
+      console.log("Seleção de time só pode ocorrer na fase 'waiting'.");
+      return;
+    }
+    
+    websocket.value.send(`select-${team}`);
+};
+
 const vote = (team) => {
     
     if (state.value.game.status !== 'running') {
@@ -258,6 +268,8 @@ onMounted(() => {
     ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
 
+      console.log('Recebi:', data);
+
       if (data.game) {
         state.value.game = data.game;
         updateTimer();
@@ -268,6 +280,10 @@ onMounted(() => {
 
       if (data.history) {
         state.value.gameHistory = data.history;
+      }
+
+      if (data.player) {
+        state.value.player = data.player;
       }
     };
 
@@ -383,7 +399,7 @@ function updateTimer() {
                         <div class="flex w-full gap-5 justify-around items-center">
                             
                             <!-- Home -->
-                            <div class="w-1/3 hover:bg-slate-300 cursor-pointer group bg-slate-100 rounded-lg flex gap-2 py-2 flex-col items-center">
+                            <div @click="selectTeam('home')" class="w-1/3 hover:bg-slate-300 cursor-pointer group bg-slate-100 rounded-lg flex gap-2 py-2 flex-col items-center">
                                 <img :src="state.game.homeFlag" alt="home" class="w-20 animate-pulse group-hover:animate-none h-20 mx-auto">
                                 <p class="text-center font-bold flex gap-1"><span class="group-hover:block hidden">Escolher </span>{{ state.game.homeName }}</p>
                             </div>
@@ -393,7 +409,7 @@ function updateTimer() {
 
 
                             <!-- Away -->
-                            <div class="w-1/3 hover:bg-slate-300 cursor-pointer group bg-slate-100 rounded-lg flex gap-2 py-2 flex-col items-center">
+                            <div @click="selectTeam('away')" class="w-1/3 hover:bg-slate-300 cursor-pointer group bg-slate-100 rounded-lg flex gap-2 py-2 flex-col items-center">
                                 <img :src="state.game.awayFlag" alt="home" class="w-20 animate-pulse group-hover:animate-none h-20 mx-auto">
                                 <p class="text-center font-bold flex gap-1"><span class="group-hover:block hidden">Escolher </span>{{ state.game.awayName }}</p>
                             </div>
@@ -411,6 +427,10 @@ function updateTimer() {
                     
                     <KeepAlive>
                         <GameHistory :gameHistory="state.gameHistory" />
+                    </KeepAlive>
+
+                    <KeepAlive>
+                        <GameProfile :player="state.player" :game="state.game" />
                     </KeepAlive>
                     
                     <!-- <p>Os times que irão disputar são:</p>
@@ -452,6 +472,10 @@ function updateTimer() {
                     
                     <KeepAlive>
                         <GameHistory :gameHistory="state.gameHistory" />
+                    </KeepAlive>
+
+                    <KeepAlive>
+                        <GameProfile :player="state.player" :game="state.game" />
                     </KeepAlive>
                 </div>
             </div>
@@ -506,6 +530,10 @@ function updateTimer() {
                     
                     <KeepAlive>
                         <GameHistory :gameHistory="state.gameHistory" />
+                    </KeepAlive>
+
+                    <KeepAlive>
+                        <GameProfile :player="state.player" :game="state.game" />
                     </KeepAlive>
                 </div>
             </div>
