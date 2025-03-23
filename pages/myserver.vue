@@ -404,7 +404,7 @@ function updateTimer() {
                 {{ gameStatus }}
             </div>
             <!-- Team showoff -->
-            <div v-if="state.game.status === 'waiting'">
+            <div v-show="state.game.status === 'waiting'">
                 <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-br from-[#50C9C3] to-[#96DEDA] min-h-screen">
                     
                     <div class="container">
@@ -475,7 +475,7 @@ function updateTimer() {
             </div>
 
             <!-- Voting -->
-            <div v-if="state.game.status === 'running'">
+            <div v-show="state.game.status === 'running'">
                 <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-br from-[#50C9C3] to-[#96DEDA] min-h-screen">
                     <div class="container">
                         <GameProgressBar 
@@ -538,7 +538,7 @@ function updateTimer() {
             </div>
 
             <!-- Winner screen -->
-            <div v-if="state.game.status === 'finished'">
+            <div v-show="state.game.status === 'finished'">
                 <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-br from-[#50C9C3] to-[#96DEDA] min-h-screen">
                     <div class="container bg-white">
                         <GameProgressBar 
@@ -605,13 +605,6 @@ function updateTimer() {
                     </KeepAlive>
                 </div>
             </div>
-
-            <!-- <p>Status: {{ gameStatus }}</p>
-            <p>Time casa: {{ state.homeName }}</p>
-            <p>Time visitante: {{ state.awayName }}</p>
-            <p>{{ state.homeVotes }} x {{ state.awayVotes }}</p>
-            <button @click="vote('home')" :disabled="state.status !== 'running'">Vote {{ state.homeName }}</button>
-            <button @click="vote('away')" :disabled="state.status !== 'running'">Vote {{ state.awayName }}</button> -->
         </div>
     </div>  
 </template>
