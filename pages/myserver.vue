@@ -5,6 +5,8 @@ const { $confetti } = useNuxtApp();
 
 const connection = ref('pending');
 
+const ephemeralEffects = ref([]); 
+
 useHead({
     title: 'Gol de Habilidade - Check Goal',
     // add favicon svg
@@ -217,6 +219,17 @@ const vote = (team) => {
       console.log("Votação só pode ocorrer na fase 'running'.");
       return;
     }
+      // @TODO - Adaptar a futura lógica de validacao de votos
+      // Dispara o efeito animado
+      ephemeralEffects.value.push({
+        id: Date.now() + Math.random(),
+        side: team
+      });
+      
+      // Remove depois de 1s 
+      setTimeout(() => {
+        ephemeralEffects.value.shift();
+      }, 1000);
     
     websocket.value.send(`vote-${team}`);
 };
@@ -613,4 +626,5 @@ function updateTimer() {
             </ClientOnly>
         </div>
     </div>  
+    <VoteEffects :effects="ephemeralEffects" />
 </template>
