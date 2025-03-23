@@ -605,6 +605,12 @@ function updateTimer() {
                     </KeepAlive>
                 </div>
             </div>
+
+            <ClientOnly>
+                <Teleport to="#teleports">
+                    <!-- Teleport goes here -->
+                </Teleport>
+            </ClientOnly>
         </div>
     </div>  
 </template>
