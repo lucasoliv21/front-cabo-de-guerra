@@ -13,4 +13,8 @@ import { NuxtPage } from '#components';
 canvas {
   pointer-events: none;
 }
+
+* {
+  touch-action: manipulation;
+}
 </style>
