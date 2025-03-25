@@ -38,6 +38,7 @@ const state = ref({
   stats: {}, 
   gameHistory: [],
   player: {},
+  shop: [],
 });
 
 // top 5 toggle
@@ -310,6 +311,10 @@ onMounted(() => {
       if (data.player) {
         state.value.player = data.player;
       }
+
+      if (data.shop) {
+        state.value.shop = data.shop;
+      }
     };
 
     ws.onclose = function() {
@@ -477,9 +482,9 @@ function updateTimer() {
                         <GameHistory :gameHistory="state.gameHistory" />
                     </KeepAlive>
 
-                    <KeepAlive>
-                        <GameProfile :player="state.player" :game="state.game" />
-                    </KeepAlive>
+                    <!-- <KeepAlive> -->
+                        <GameProfile :shop="state.shop" :player="state.player" :game="state.game" />
+                    <!-- </KeepAlive> -->
                     
                     <!-- <p>Os times que irão disputar são:</p>
                     <p>{{ state.homeName }}</p>
@@ -544,9 +549,9 @@ function updateTimer() {
                         <GameHistory :gameHistory="state.gameHistory" />
                     </KeepAlive>
 
-                    <KeepAlive>
-                        <GameProfile :player="state.player" :game="state.game" />
-                    </KeepAlive>
+                    <!-- <KeepAlive> -->
+                        <GameProfile :shop="state.shop" :player="state.player" :game="state.game" />
+                    <!-- </KeepAlive> -->
                 </div>
             </div>
 
@@ -613,9 +618,9 @@ function updateTimer() {
                         <GameHistory :gameHistory="state.gameHistory" />
                     </KeepAlive>
 
-                    <KeepAlive>
-                        <GameProfile :player="state.player" :game="state.game" />
-                    </KeepAlive>
+                    <!-- <KeepAlive> -->
+                        <GameProfile :shop="state.shop" :player="state.player" :game="state.game" />
+                    <!-- </KeepAlive> -->
                 </div>
             </div>
 

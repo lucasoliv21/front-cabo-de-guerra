@@ -1,8 +1,13 @@
 <script setup>
 
-const toggleModal = () => {
-    alert('Abrir modal da loja');
-}
+const props = defineProps({
+    shop: {
+        required: true
+    },
+    points: {
+        required: true
+    }
+});
 
 const open = ref(false);
 </script>
@@ -32,7 +37,7 @@ const open = ref(false);
                         <!-- Right side-->
                         <div class="flex flex-row items-center gap-2">
                             <div class="text-sm cursor-pointer p-1 bg-gradient-to-b from-[#F7971E] to-[#FFD200] hover:from-[#F7971E] hover:to-[#FFD200] rounded">
-                                Pontos: <strong>1231293</strong>
+                                Pontos: <strong>{{ props.points }}</strong>
                             </div>
                             <button @click="open = false" class="cursor-pointer font-bold bg-gray-400 hover:bg-gray-600 py-0.5 px-2 rounded sm text-white">
                                 X
@@ -45,17 +50,7 @@ const open = ref(false);
                         <!-- Itens -->
                         <div class="grid grid-cols-2 gap-4 mt-4">
 
-                            <GameStoreItem />
-
-                            <GameStoreItem />
-
-                            <GameStoreItem />
-
-                            <GameStoreItem />
-
-                            <GameStoreItem />
-
-                            <GameStoreItem />
+                            <GameStoreItem v-for="item in props.shop" :key="item.id" :shopItem="item" />
 
                         </div>
                     </div>

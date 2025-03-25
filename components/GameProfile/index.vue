@@ -5,6 +5,9 @@ const props = defineProps({
     },
     game: {
         required: true
+    },
+    shop: {
+        required: true
     }
 });
 
@@ -24,8 +27,8 @@ const teamNameComputed = computed(() => {
             <p class="bg-gradient-to-b from-[#F7971E] to-[#FFD200] py-0.5 px-2 rounded sm">Time atual: <strong>{{ teamNameComputed }}</strong></p>
         </div>
 
-        <KeepAlive>
-            <GameStore />
-        </KeepAlive>
+        <!-- <KeepAlive> -->
+            <GameStore :points="props.player.wins" :shop="props.shop" />
+        <!-- </KeepAlive> -->
     </div>
 </template>
