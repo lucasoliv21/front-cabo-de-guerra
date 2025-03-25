@@ -1,5 +1,6 @@
 <script setup>
 import { ulid } from 'ulid';
+import { useWebsocket } from '~/stores/websocket';
 
 const { $confetti } = useNuxtApp();
 
@@ -202,8 +203,7 @@ watch(
     }
 )
 
-// @TODO - Resolver essa gambiarra pro jogo ter acesos a ref websocket
-const websocket = ref(null);
+const websocket = useWebsocket();
 
 const selectTeam = (team) => {
     if (state.value.game.status !== 'waiting') {
@@ -211,7 +211,7 @@ const selectTeam = (team) => {
       return;
     }
     
-    websocket.value.send(`select-${team}`);
+    websocket.ws.send(`select-${team}`);
 };
 
 const vote = (team) => {
@@ -232,7 +232,7 @@ const vote = (team) => {
         ephemeralEffects.value.shift();
       }, 1000);
     
-    websocket.value.send(`vote-${team}`);
+      websocket.ws.send(`vote-${team}`);
 };
 
 const playerTeamIsSelected = computed(() => {
@@ -282,18 +282,16 @@ const getToken = () => {
 onMounted(() => {
     const userToken = getToken();
 
-    const ws = new WebSocket(`ws://localhost:9502/${userToken}`);
+    websocket.connect(`ws://localhost:9502/${userToken}`);
 
-    websocket.value = ws;
-
-    ws.onopen = function() {
+    websocket.ws.onopen = function() {
         console.log('Conectado!');
         connection.value = 'connected';
 
-        ws.send('send-state');
+        websocket.ws.send('send-state');
     };
 
-    ws.onmessage = (e) => {
+    websocket.ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
 
       if (data.game) {
@@ -317,12 +315,12 @@ onMounted(() => {
       }
     };
 
-    ws.onclose = function() {
+    websocket.ws.onclose = function() {
         console.log('Desconectado!');
         connection.value = 'disconnected';
     };
 
-    ws.onerror = function(err) {
+    websocket.ws.onerror = function(err) {
         console.error('Erro:', err);
         connection.value = 'disconnected';
     };
