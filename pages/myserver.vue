@@ -1,5 +1,6 @@
 <script setup>
 import { ulid } from 'ulid';
+import { useWebsocket } from '~/stores/websocket';
 
 const { $confetti } = useNuxtApp();
 
@@ -38,6 +39,7 @@ const state = ref({
   stats: {}, 
   gameHistory: [],
   player: {},
+  shop: [],
 });
 
 // top 5 toggle
@@ -201,8 +203,7 @@ watch(
     }
 )
 
-// @TODO - Resolver essa gambiarra pro jogo ter acesos a ref websocket
-const websocket = ref(null);
+const websocket = useWebsocket();
 
 const selectTeam = (team) => {
     if (state.value.game.status !== 'waiting') {
@@ -210,7 +211,7 @@ const selectTeam = (team) => {
       return;
     }
     
-    websocket.value.send(`select-${team}`);
+    websocket.ws.send(`select-${team}`);
 };
 
 const lastVoteTeam = ref(null);
@@ -224,7 +225,7 @@ function vote(team) {
   // Marca qual time o jogador escolheu
   lastVoteTeam.value = team;
 
-  websocket.value.send(`vote-${team}`);
+  websocket.ws.send(`vote-${team}`);
 }
 
 const playerTeamIsSelected = computed(() => {
@@ -274,18 +275,16 @@ const getToken = () => {
 onMounted(() => {
     const userToken = getToken();
 
-    const ws = new WebSocket(`ws://localhost:9502/${userToken}`);
+    websocket.connect(`ws://localhost:9502/${userToken}`);
 
-    websocket.value = ws;
-
-    ws.onopen = function() {
+    websocket.ws.onopen = function() {
         console.log('Conectado!');
         connection.value = 'connected';
 
-        ws.send('send-state');
+        websocket.ws.send('send-state');
     };
 
-    ws.onmessage = (e) => {
+    websocket.ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
 
       if (data.type === 'vote-response') {
@@ -319,14 +318,18 @@ onMounted(() => {
       if (data.player) {
         state.value.player = data.player;
       }
+
+      if (data.shop) {
+        state.value.shop = data.shop;
+      }
     };
 
-    ws.onclose = function() {
+    websocket.ws.onclose = function() {
         console.log('Desconectado!');
         connection.value = 'disconnected';
     };
 
-    ws.onerror = function(err) {
+    websocket.ws.onerror = function(err) {
         console.error('Erro:', err);
         connection.value = 'disconnected';
     };
@@ -451,7 +454,7 @@ function updateTimer() {
                 {{ gameStatus }}
             </div>
             <!-- Team showoff -->
-            <div v-if="state.game.status === 'waiting'">
+            <div v-show="state.game.status === 'waiting'">
                 <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-br from-[#50C9C3] to-[#96DEDA] min-h-screen">
                     
                     <div class="container">
@@ -511,9 +514,9 @@ function updateTimer() {
                         <GameHistory :gameHistory="state.gameHistory" />
                     </KeepAlive>
 
-                    <KeepAlive>
-                        <GameProfile :player="state.player" :game="state.game" />
-                    </KeepAlive>
+                    <!-- <KeepAlive> -->
+                        <GameProfile :shop="state.shop" :player="state.player" :game="state.game" />
+                    <!-- </KeepAlive> -->
                     
                     <!-- <p>Os times que irão disputar são:</p>
                     <p>{{ state.homeName }}</p>
@@ -522,7 +525,7 @@ function updateTimer() {
             </div>
 
             <!-- Voting -->
-            <div v-if="state.game.status === 'running'">
+            <div v-show="state.game.status === 'running'">
                 <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-br from-[#50C9C3] to-[#96DEDA] min-h-screen">
                     <div class="container">
                         <GameProgressBar 
@@ -578,14 +581,14 @@ function updateTimer() {
                         <GameHistory :gameHistory="state.gameHistory" />
                     </KeepAlive>
 
-                    <KeepAlive>
-                        <GameProfile :player="state.player" :game="state.game" />
-                    </KeepAlive>
+                    <!-- <KeepAlive> -->
+                        <GameProfile :shop="state.shop" :player="state.player" :game="state.game" />
+                    <!-- </KeepAlive> -->
                 </div>
             </div>
 
             <!-- Winner screen -->
-            <div v-if="state.game.status === 'finished'">
+            <div v-show="state.game.status === 'finished'">
                 <div class="flex flex-col gap-2 justify-center items-center bg-gradient-to-br from-[#50C9C3] to-[#96DEDA] min-h-screen">
                     <div class="container bg-white">
                         <GameProgressBar 
@@ -647,18 +650,17 @@ function updateTimer() {
                         <GameHistory :gameHistory="state.gameHistory" />
                     </KeepAlive>
 
-                    <KeepAlive>
-                        <GameProfile :player="state.player" :game="state.game" />
-                    </KeepAlive>
+                    <!-- <KeepAlive> -->
+                        <GameProfile :shop="state.shop" :player="state.player" :game="state.game" />
+                    <!-- </KeepAlive> -->
                 </div>
             </div>
 
-            <!-- <p>Status: {{ gameStatus }}</p>
-            <p>Time casa: {{ state.homeName }}</p>
-            <p>Time visitante: {{ state.awayName }}</p>
-            <p>{{ state.homeVotes }} x {{ state.awayVotes }}</p>
-            <button @click="vote('home')" :disabled="state.status !== 'running'">Vote {{ state.homeName }}</button>
-            <button @click="vote('away')" :disabled="state.status !== 'running'">Vote {{ state.awayName }}</button> -->
+            <ClientOnly>
+                <Teleport to="#teleports">
+                    <!-- Teleport goes here -->
+                </Teleport>
+            </ClientOnly>
         </div>
     </div>  
     <VoteEffects :effects="ephemeralEffects" />
