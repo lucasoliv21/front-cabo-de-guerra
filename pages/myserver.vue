@@ -214,26 +214,19 @@ const selectTeam = (team) => {
     websocket.ws.send(`select-${team}`);
 };
 
-const vote = (team) => {
-    
-    if (state.value.game.status !== 'running') {
-      console.log("Votação só pode ocorrer na fase 'running'.");
-      return;
-    }
-      // @TODO - Adaptar a futura lógica de validacao de votos
-      // Dispara o efeito animado
-      ephemeralEffects.value.push({
-        id: Date.now() + Math.random(),
-        side: team
-      });
-      
-      // Remove depois de 1s 
-      setTimeout(() => {
-        ephemeralEffects.value.shift();
-      }, 1000);
-    
-      websocket.ws.send(`vote-${team}`);
-};
+const lastVoteTeam = ref(null);
+
+function vote(team) {
+  if (state.value.game.status !== 'running') {
+    console.log("Fase não está 'running'.");
+    return;
+  }
+  
+  // Marca qual time o jogador escolheu
+  lastVoteTeam.value = team;
+
+  websocket.ws.send(`vote-${team}`);
+}
 
 const playerTeamIsSelected = computed(() => {
     return state.value.player.currentTeam !== null;
@@ -294,6 +287,24 @@ onMounted(() => {
     websocket.ws.onmessage = (e) => {
       const data = JSON.parse(e.data);
 
+      if (data.type === 'vote-response') {
+        if (data.status === 'accepted') {
+
+          ephemeralEffects.value.push({
+            id: Date.now() + Math.random(),
+            side: lastVoteTeam.value,
+          });
+          setTimeout(() => ephemeralEffects.value.shift(), 1000);
+        }
+        else if (data.status === 'cooldown') {
+            showEphemeralMessage('Você está em cooldown! Aguarde 1s para votar.');
+        }
+        else if (data.status === 'not-running') {
+            showEphemeralMessage('A votação não está em andamento no momento.');
+        }
+        return;
+      }
+
       if (data.game) {
         state.value.game = data.game;
         updateTimer();
@@ -301,11 +312,9 @@ onMounted(() => {
       if (data.stats) {
         state.value.stats = data.stats;
       }
-
       if (data.history) {
         state.value.gameHistory = data.history;
       }
-
       if (data.player) {
         state.value.player = data.player;
       }
@@ -327,6 +336,21 @@ onMounted(() => {
     
     timerInterval = setInterval(updateTimer, 1000);
 })
+
+const ephemeralMessages = ref([]);
+
+function showEphemeralMessage(text, duration = 1000) {
+  const msg = {
+    id: Date.now() + Math.random(),
+    text,
+  };
+
+  ephemeralMessages.value.push(msg);
+
+  setTimeout(() => {
+    ephemeralMessages.value = ephemeralMessages.value.filter(m => m.id !== msg.id);
+  }, duration);
+}
 
 onUnmounted(() => {
   clearInterval(timerInterval);
@@ -412,6 +436,16 @@ function updateTimer() {
                       {{ index + 1 }}. {{ item.teamName }} - {{ (item.winRate * 100).toFixed(2) }}%
                     </li>
                   </ul>
+                </div>
+            </div>
+            
+            <div class="absolute top-5 left-1/2 transform -translate-x-1/2 z-50">
+                <div
+                  v-for="message in ephemeralMessages"
+                  :key="message.id"
+                  class="mb-2 px-3 py-1 bg-red-600 text-white rounded shadow"
+                >
+                  {{ message.text }}
                 </div>
             </div>
 
