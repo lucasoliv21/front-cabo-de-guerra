@@ -23,3 +23,7 @@ export const useWebsocket = defineStore('websocket', () => {
         send,
     };
 });
+
+if (import.meta.hot) {
+    import.meta.hot.accept(acceptHMRUpdate(useWebsocket, import.meta.hot));
+}
