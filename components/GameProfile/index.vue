@@ -29,7 +29,7 @@ const teamNameComputed = computed(() => {
         </div>
 
         <!-- <KeepAlive> -->
-            <GameStore :points="props.player.wins" :shop="props.shop" />
+            <GameStore :points="props.player.points" :shop="props.shop" />
         <!-- </KeepAlive> -->
     </div>
 </template>
