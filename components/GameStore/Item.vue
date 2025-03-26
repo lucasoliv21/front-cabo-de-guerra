@@ -13,6 +13,10 @@ const websocket = useWebsocket();
 const buyItem = () => {
     websocket.send('buyItem', { id: props.shopItem.id });
 }
+
+const buttonText = computed(() => {
+    return props.shopItem.purchased ? 'Adquirido' : 'Comprar';
+});
 </script>
 
 <template>
@@ -33,7 +37,7 @@ const buyItem = () => {
                 @click="buyItem"
                 :disabled="shopItem.purchased || props.playerPoints < shopItem.price"
                 class="border-purple-200 disabled:bg-purple-900/30 disabled:text-white disabled:border-transparent border-2 px-4 py-0.5 cursor-pointer rounded-xl text-purple-600 hover:border-transparent hover:bg-purple-600 hover:text-white active:bg-purple-700">
-                Comprar
+                {{ buttonText }}
             </button>
         </div>
     </div>
