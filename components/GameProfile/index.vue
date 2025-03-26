@@ -23,6 +23,7 @@ const teamNameComputed = computed(() => {
             <!-- <p class="bg-slate-300 py-0.5 px-2 rounded sm">ID: <strong>{{ props.player.id }}</strong></p> -->
             <p class="bg-slate-300 py-0.5 px-2 rounded sm">Nome: <strong>{{ props.player.name }}</strong></p>
             <p class="bg-slate-300 py-0.5 px-2 rounded sm">Vitórias: <strong>{{ props.player.wins }}</strong></p>
+            <p class="bg-slate-300 py-0.5 px-2 rounded sm">Pontos: <strong>{{ props.player.points }}</strong></p>
             <!-- <p class="bg-slate-300 py-0.5 px-2 rounded sm">Pontuação: <strong>{{ props.player.wins }}</strong></p> -->
             <p class="bg-gradient-to-b from-[#F7971E] to-[#FFD200] py-0.5 px-2 rounded sm">Time atual: <strong>{{ teamNameComputed }}</strong></p>
         </div>
