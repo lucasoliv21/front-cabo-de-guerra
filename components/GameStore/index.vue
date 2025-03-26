@@ -50,7 +50,7 @@ const open = ref(false);
                         <!-- Itens -->
                         <div class="grid grid-cols-2 gap-4 mt-4">
 
-                            <GameStoreItem v-for="item in props.shop" :key="item.id" :shopItem="item" />
+                            <GameStoreItem v-for="item in props.shop" :key="item.id" :playerPoints="props.points" :shopItem="item" />
 
                         </div>
                     </div>

@@ -2,8 +2,17 @@
 const props = defineProps({
     shopItem: {
         required: true
+    },
+    playerPoints: {
+        required: true
     }
 });
+
+const websocket = useWebsocket();
+
+const buyItem = () => {
+    websocket.send('buyItem', { id: props.shopItem.id });
+}
 </script>
 
 <template>
@@ -20,7 +29,10 @@ const props = defineProps({
             <div class="text-sm md:w-fit cursor-pointer py-0.5 px-4 border-1 border-[#F7971E] hover:from-[#F7971E] hover:to-[#FFD200] rounded">
                 Custo: <strong>{{ shopItem.price }} pontos</strong>
             </div>
-            <button class="border-purple-200 disabled:bg-purple-900/30 disabled:text-white disabled:border-transparent border-2 px-4 py-0.5 cursor-pointer rounded-xl text-purple-600 hover:border-transparent hover:bg-purple-600 hover:text-white active:bg-purple-700">
+            <button 
+                @click="buyItem"
+                :disabled="shopItem.purchased || props.playerPoints < shopItem.price"
+                class="border-purple-200 disabled:bg-purple-900/30 disabled:text-white disabled:border-transparent border-2 px-4 py-0.5 cursor-pointer rounded-xl text-purple-600 hover:border-transparent hover:bg-purple-600 hover:text-white active:bg-purple-700">
                 Comprar
             </button>
         </div>
