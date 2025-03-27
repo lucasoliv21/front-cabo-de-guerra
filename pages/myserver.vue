@@ -572,8 +572,21 @@ function updateTimer() {
                         </div>
 
                         <div class="flex gap-5 justify-around items-center">
-                            <button @click="vote('home')" :disabled="state.game.status !== 'running'" class="bg-blue-500 hover:bg-blue-700 active:bg-blue-800 text-white cursor-pointer p-2 rounded-md select-none">Vote {{ state.homeName }}</button>
-                            <button @click="vote('away')" :disabled="state.game.status !== 'running'" class="bg-blue-500 hover:bg-blue-700 active:bg-blue-800 text-white cursor-pointer p-2 rounded-md select-none">Vote {{ state.awayName }}</button>
+                            <GameButton
+                                @click="vote('home')"
+                                :disabled="state.game.status !== 'running'"
+                                variant="primary"
+                                >
+                                <img :src="state.game.homeFlag" alt="home" class="w-10 h-10">
+                            </GameButton>
+
+                            <GameButton
+                                @click="vote('away')"
+                                :disabled="state.game.status !== 'running'"
+                                variant="secondary"
+                                >
+                                <img :src="state.game.awayFlag" alt="away" class="w-10 h-10">
+                            </GameButton>
                         </div>
                     </div>
                     
