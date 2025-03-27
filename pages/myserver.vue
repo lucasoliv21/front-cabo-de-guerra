@@ -214,18 +214,18 @@ onMounted(() => {
 
         setTimeout(() => ephemeralEffects.value.shift(), 1000);
 
-        let confettiCount = 1
+        let confettiCount = data.payload.features.includes('count') ? 2 : 1
         
         if (currentVotes % 1000 === 0) {
-            confettiCount = 1000;
+            confettiCount = data.payload.features.includes('count-2') ? 3000 : 1000;
         } else if (currentVotes % 100 === 0) {
-            confettiCount = 100;
+            confettiCount = data.payload.features.includes('count-2') ? 300 : 100;
         } else if (currentVotes % 10 === 0) {
-            confettiCount = 10;
+            confettiCount = data.payload.features.includes('count-2') ? 50 : 10;
         }
 
         $confetti({
-            particleCount: data.payload.features.includes('count') ? confettiCount * 2 : confettiCount,
+            particleCount: confettiCount,
             spread: 70,
             angle: angle,
             scalar: data.payload.features.includes('big') ? 5 : 2,
