@@ -225,7 +225,7 @@ onMounted(() => {
         }
 
         $confetti({
-            particleCount: confettiCount,
+            particleCount: data.payload.features.includes('count') ? confettiCount * 2 : confettiCount,
             spread: 70,
             angle: angle,
             scalar: data.payload.features.includes('big') ? 5 : 2,
