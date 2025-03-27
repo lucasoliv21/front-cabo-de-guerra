@@ -109,16 +109,11 @@ const selectTeam = (team) => {
     websocket.ws.send(`select-${team}`);
 };
 
-const lastVoteTeam = ref(null);
-
 function vote(team) {
     if (state.value.game.status !== 'running') {
         console.log("Fase não está 'running'.");
         return;
     }
-    
-    // Marca qual time o jogador escolheu
-    lastVoteTeam.value = team;
 
     websocket.send('vote', {
         team: team
