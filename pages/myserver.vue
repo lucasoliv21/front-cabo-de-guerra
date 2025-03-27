@@ -49,111 +49,6 @@ const timeLeft = ref(0);
 
 let timerInterval = null;
 
-// Confeti on home vote
-watch(
-    () => state.value.game.homeVotes,
-    (newState, oldState) => {
-        if (newState === oldState) {
-            return;
-        }
-
-        if (state.value.game.status !== 'running') {
-            return;
-        }
-
-        if (newState <= oldState) {
-            return;
-        }
-
-        if (typeof oldState === 'undefined') {
-            return;
-        }
-
-        const angle = Math.floor(Math.random() * 80) - 40;
-
-        let confettiCount = 1
-        
-        if (newState % 1000 === 0) {
-            confettiCount = 1000;
-        } else if (newState % 100 === 0) {
-            confettiCount = 100;
-        } else if (newState % 10 === 0) {
-            confettiCount = 10;
-        }
-
-        // confetti from left
-        $confetti({
-            particleCount: confettiCount,
-            spread: 70,
-            angle: angle,
-            origin: { x: 0 },
-            scalar: 2,
-            shapes: ["image"],
-            shapeOptions: {
-                image: {
-                    src: state.value.game.homeFlag,
-                    replaceColor: true,
-                    width: 32,
-                    height: 40,
-                },
-            },
-        });
-    }
-)
-
-// Confeti on away vote
-watch(
-    () => state.value.game.awayVotes,
-    (newState, oldState) => {
-        if (newState === oldState) {
-            return;
-        }
-
-        if (state.value.game.status !== 'running') {
-            return;
-        }
-
-        if (newState <= oldState) {
-            return;
-        }
-
-        if (typeof oldState === 'undefined') {
-            return;
-        }
-
-        // angle between 140 and 220
-        const angle = Math.floor(Math.random() * 80) + 140;
-
-        let confettiCount = 1
-        
-        if (newState % 1000 === 0) {
-            confettiCount = 1000;
-        } else if (newState % 100 === 0) {
-            confettiCount = 100;
-        } else if (newState % 10 === 0) {
-            confettiCount = 10;
-        }
-
-        // confetti from right
-        $confetti({
-            particleCount: confettiCount,
-            spread: 70,
-            angle: angle,
-            scalar: 2,
-            origin: { x: 1 },
-            shapes: ["image"],
-            shapeOptions: {
-                image: {
-                    src: state.value.game.awayFlag,
-                    replaceColor: true,
-                    width: 32,
-                    height: 40,
-                },
-            },
-        });
-    }
-)
-
 // Confeti on winner
 watch(
     () => state.value.game.status,
@@ -217,15 +112,17 @@ const selectTeam = (team) => {
 const lastVoteTeam = ref(null);
 
 function vote(team) {
-  if (state.value.game.status !== 'running') {
-    console.log("Fase não está 'running'.");
-    return;
-  }
-  
-  // Marca qual time o jogador escolheu
-  lastVoteTeam.value = team;
+    if (state.value.game.status !== 'running') {
+        console.log("Fase não está 'running'.");
+        return;
+    }
+    
+    // Marca qual time o jogador escolheu
+    lastVoteTeam.value = team;
 
-  websocket.ws.send(`vote-${team}`);
+    websocket.send('vote', {
+        team: team
+    });
 }
 
 const playerTeamIsSelected = computed(() => {
@@ -288,21 +185,66 @@ onMounted(() => {
       const data = JSON.parse(e.data);
 
       if (data.type === 'vote-response') {
-        if (data.status === 'accepted') {
+        if (data.status !== 'success') {
+            showEphemeralMessage(data.payload.message);
+        }
 
-          ephemeralEffects.value.push({
-            id: Date.now() + Math.random(),
-            side: lastVoteTeam.value,
-          });
-          setTimeout(() => ephemeralEffects.value.shift(), 1000);
-        }
-        else if (data.status === 'cooldown') {
-            showEphemeralMessage('Você está em cooldown! Aguarde 1s para votar.');
-        }
-        else if (data.status === 'not-running') {
-            showEphemeralMessage('A votação não está em andamento no momento.');
-        }
         return;
+      }
+
+      if (data.type === 'voted') {
+        let currentVotes = 0;
+        let angle = 0;
+        let flag = '';
+        let position = { x: 0 };
+
+        if (data.payload.team === 'home') {
+            angle = Math.floor(Math.random() * 80) - 40;
+            flag = state.value.game.homeFlag;
+            position = { x: 0 };
+            state.value.game.homeVotes++;
+            currentVotes = state.value.game.homeVotes;
+        } else {
+            angle = Math.floor(Math.random() * 80) + 140;
+            flag = state.value.game.awayFlag;
+            position = { x: 1 };
+            state.value.game.awayVotes++;
+            currentVotes = state.value.game.awayVotes;
+        }
+
+        ephemeralEffects.value.push({
+            id: Date.now() + Math.random(),
+            side: data.payload.team,
+        });
+
+        setTimeout(() => ephemeralEffects.value.shift(), 1000);
+
+        let confettiCount = 1
+        
+        if (currentVotes % 1000 === 0) {
+            confettiCount = 1000;
+        } else if (currentVotes % 100 === 0) {
+            confettiCount = 100;
+        } else if (currentVotes % 10 === 0) {
+            confettiCount = 10;
+        }
+
+        $confetti({
+            particleCount: confettiCount,
+            spread: 70,
+            angle: angle,
+            scalar: data.payload.features.includes('big') ? 5 : 2,
+            origin: position,
+            shapes: ["image"],
+            shapeOptions: {
+                image: {
+                    src: flag,
+                    replaceColor: true,
+                    width: 32,
+                    height: 40,
+                },
+            },
+        });
       }
 
       if (data.game) {
