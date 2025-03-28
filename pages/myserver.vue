@@ -109,17 +109,6 @@ const selectTeam = (team) => {
     websocket.ws.send(`select-${team}`);
 };
 
-function vote(team) {
-    if (state.value.game.status !== 'running') {
-        console.log("Fase não está 'running'.");
-        return;
-    }
-
-    websocket.send('vote', {
-        team: team
-    });
-}
-
 const playerTeamIsSelected = computed(() => {
     return state.value.player.currentTeam !== null;
 });
@@ -511,8 +500,8 @@ function updateTimer() {
                         </div>
 
                         <div class="flex gap-5 justify-around items-center">
-                            <GameButton
-                                @click="vote('home')"
+                            <GameButton 
+                                team="home"
                                 :disabled="state.game.status !== 'running'"
                                 variant="primary"
                                 >
@@ -520,7 +509,7 @@ function updateTimer() {
                             </GameButton>
 
                             <GameButton
-                                @click="vote('away')"
+                                team="away"
                                 :disabled="state.game.status !== 'running'"
                                 variant="secondary"
                                 >
