@@ -39,7 +39,7 @@ const voteHandle = (e) => {
 };
 </script>
 
-<template><!-- Duolingo stype button with tailwind css -->
+<template>
     <button
         @click="voteHandle"
         :class="[
