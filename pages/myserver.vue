@@ -207,12 +207,14 @@ onMounted(() => {
             currentVotes = state.value.game.awayVotes;
         }
 
-        ephemeralEffects.value.push({
-            id: Date.now() + Math.random(),
-            side: data.payload.team,
-        });
+        if (data.payload.self) {
+            ephemeralEffects.value.push({
+                id: Date.now() + Math.random(),
+                side: data.payload.team,
+            });
 
-        setTimeout(() => ephemeralEffects.value.shift(), 1000);
+            setTimeout(() => ephemeralEffects.value.shift(), 1000);
+        }
 
         let confettiCount = data.payload.features.includes('count') ? 2 : 1
         
