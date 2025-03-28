@@ -11,12 +11,21 @@ export default defineNuxtConfig({
   vite: {
     plugins: [
       tailwindcss(),
-    ]
+    ],
+    optimizeDeps: {
+      include: ["howler"],
+    },
   },
 
   css: ['~/assets/css/main.css'],
   compatibilityDate: "2025-03-03",
-  modules: ['@pinia/nuxt'],
+  modules: ['@pinia/nuxt', '@vueuse/sound/nuxt'],
+
+  sound: {
+    sounds: {
+      scan: true,
+    },
+  },
 
   devtools: {
     enabled: true,
