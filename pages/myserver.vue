@@ -109,17 +109,6 @@ const selectTeam = (team) => {
     websocket.ws.send(`select-${team}`);
 };
 
-function vote(team) {
-    if (state.value.game.status !== 'running') {
-        console.log("Fase não está 'running'.");
-        return;
-    }
-
-    websocket.send('vote', {
-        team: team
-    });
-}
-
 const playerTeamIsSelected = computed(() => {
     return state.value.player.currentTeam !== null;
 });
@@ -207,12 +196,14 @@ onMounted(() => {
             currentVotes = state.value.game.awayVotes;
         }
 
-        ephemeralEffects.value.push({
-            id: Date.now() + Math.random(),
-            side: data.payload.team,
-        });
+        if (data.payload.self) {
+            ephemeralEffects.value.push({
+                id: Date.now() + Math.random(),
+                side: data.payload.team,
+            });
 
-        setTimeout(() => ephemeralEffects.value.shift(), 1000);
+            setTimeout(() => ephemeralEffects.value.shift(), 1000);
+        }
 
         let confettiCount = data.payload.features.includes('count') ? 2 : 1
         
@@ -509,8 +500,21 @@ function updateTimer() {
                         </div>
 
                         <div class="flex gap-5 justify-around items-center">
-                            <button @click="vote('home')" :disabled="state.game.status !== 'running'" class="bg-blue-500 hover:bg-blue-700 active:bg-blue-800 text-white cursor-pointer p-2 rounded-md select-none">Vote {{ state.homeName }}</button>
-                            <button @click="vote('away')" :disabled="state.game.status !== 'running'" class="bg-blue-500 hover:bg-blue-700 active:bg-blue-800 text-white cursor-pointer p-2 rounded-md select-none">Vote {{ state.awayName }}</button>
+                            <GameButton 
+                                team="home"
+                                :disabled="state.game.status !== 'running'"
+                                variant="primary"
+                                >
+                                <img :src="state.game.homeFlag" alt="home" class="w-10 h-10">
+                            </GameButton>
+
+                            <GameButton
+                                team="away"
+                                :disabled="state.game.status !== 'running'"
+                                variant="secondary"
+                                >
+                                <img :src="state.game.awayFlag" alt="away" class="w-10 h-10">
+                            </GameButton>
                         </div>
                     </div>
                     
