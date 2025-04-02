@@ -1,13 +1,7 @@
 <script setup>
 const websocket = useWebsocket();
 
-const click1 = useSound('/sounds/clickb1.mp3');
-const click2 = useSound('/sounds/clickb2.mp3');
-const click3 = useSound('/sounds/clickb3.mp3');
-const click4 = useSound('/sounds/clickb4.mp3');
-const click5 = useSound('/sounds/clickb5.mp3');
-const click6 = useSound('/sounds/clickb6.mp3');
-const click7 = useSound('/sounds/clickb7.mp3');
+const click = useSound('/sounds/clickb1.mp3');
 
 const props = defineProps({
     variant: {
@@ -29,11 +23,7 @@ const voteHandle = (e) => {
         return;
     };
 
-    // random one of the click sounds
-    const random = Math.floor(Math.random() * 7) + 1;
-    const sound = eval(`click${random}`);
-
-    sound.play({ playbackRate: 1 });
+    click.play({ playbackRate: 1 });
 
     onCooldown.value = true;
     onAnimation.value = true;
@@ -44,7 +34,7 @@ const voteHandle = (e) => {
 
     setTimeout(() => {
         onAnimation.value = false;
-        sound.play({ playbackRate: 1.5 });
+        click.play({ playbackRate: 1.5 });
 
         setTimeout(() => {
             onCooldown.value = false;
