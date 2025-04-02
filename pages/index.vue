@@ -234,6 +234,14 @@ onMounted(() => {
         });
       }
 
+      if (data.type === 'connected') {
+        state.value.count++;
+      }
+
+        if (data.type === 'disconnected') {
+            state.value.count--;
+        }
+
       if (data.game) {
         state.value.game = data.game;
         updateTimer();
