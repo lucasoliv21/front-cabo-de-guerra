@@ -2,8 +2,10 @@ export const useWebsocket = defineStore('websocket', () => {
     /** @type {WebSocket} */
     const ws = ref(null);
 
-    const connect = (url) => {
-        ws.value = new WebSocket(url);
+    const env = useRuntimeConfig().public;
+
+    const connect = (uri) => {
+        ws.value = new WebSocket(`${env.wsUrl}/${uri}`);
     }
 
     const send = (type, payload) => {

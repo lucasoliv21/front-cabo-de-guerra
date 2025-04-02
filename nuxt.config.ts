@@ -3,8 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      PUSHER_APP_KEY: process.env.NUXT_PUBLIC_PUSHER_APP_KEY,
-      PUSHER_APP_CLUSTER: process.env.NUXT_PUBLIC_PUSHER_APP_CLUSTER
+      wsUrl: process.env.WS_URL || 'ws://localhost:9502',
     }
   },
 

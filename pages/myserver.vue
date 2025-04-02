@@ -156,7 +156,7 @@ const getToken = () => {
 onMounted(() => {
     const userToken = getToken();
 
-    websocket.connect(`ws://localhost:9502/${userToken}`);
+    websocket.connect(userToken);
 
     websocket.ws.onopen = function() {
         console.log('Conectado!');
