@@ -401,7 +401,7 @@ function updateTimer() {
                             <div
                                 @click="selectTeam('home')"
                                 :class="[playerTeamIsSelected && playerTeamIsHome ? 'bg-emerald-400' : 'bg-slate-100 hover:bg-slate-300']"
-                                class="w-1/3 cursor-pointer group rounded-lg flex gap-2 py-2 flex-col items-center"
+                                class="w-1/3 select-none undraggable cursor-pointer group rounded-lg flex gap-2 py-2 flex-col items-center"
                                 >
                                 <img 
                                     :src="state.game.homeFlag" 
@@ -420,7 +420,7 @@ function updateTimer() {
                             <div
                                 @click="selectTeam('away')"
                                 :class="[playerTeamIsSelected && playerTeamIsAway ? 'bg-emerald-400' : 'bg-slate-100 hover:bg-slate-300']"
-                                class="w-1/3 cursor-pointer group rounded-lg flex gap-2 py-2 flex-col items-center"
+                                class="w-1/3 select-none undraggable cursor-pointer group rounded-lg flex gap-2 py-2 flex-col items-center"
                                 >
                                 <img 
                                     :src="state.game.awayFlag" 
@@ -469,9 +469,9 @@ function updateTimer() {
                             
                             <!-- Home -->
                             <div 
-                                class="w-1/3 rounded"
+                                class="w-1/3 rounded undraggable"
                                 >
-                                <img :src="state.game.homeFlag" alt="home" class="w-20 animate-bounce h-20 mx-auto">
+                                <img :src="state.game.homeFlag" alt="home" class="w-20 select-none animate-bounce h-20 mx-auto">
                                 <p class="text-center">
                                     <span 
                                         :class="[playerTeamIsSelected && playerTeamIsHome ? 'bg-gradient-to-b from-[#F7971E] to-[#FFD200] font-bold' : '']"
@@ -486,8 +486,8 @@ function updateTimer() {
 
 
                             <!-- Away -->
-                            <div class="w-1/3">
-                                <img :src="state.game.awayFlag" alt="home" class="w-20 animate-bounce h-20 mx-auto">
+                            <div class="w-1/3 rounded undraggable">
+                                <img :src="state.game.awayFlag" alt="home" class="w-20 select-none animate-bounce h-20 mx-auto">
                                 <p class="text-center">
                                     <span 
                                         :class="[playerTeamIsSelected && playerTeamIsAway ? 'bg-gradient-to-b from-[#F7971E] to-[#FFD200] font-bold' : '']"
@@ -544,12 +544,12 @@ function updateTimer() {
                         <div class="flex w-full gap-5 justify-around items-center">
                             
                             <!-- Home -->
-                            <div :class="{'bg-black/5 animate-pulse': gameWinner === state.game.homeName}" class="w-1/3 flex py-2 rounded-lg flex-col items-center">
+                            <div :class="{'bg-black/5 animate-pulse': gameWinner === state.game.homeName}" class="w-1/3 undraggable flex py-2 rounded-lg flex-col items-center">
                                 <p class="text-7xl">{{ state.game.homeVotes }}</p>
                                 <br>
                                 <div class="relative">
                                     <img :src="state.game.homeFlag" alt="home" class="w-20 h-20 mx-auto">
-                                    <img :class="{'animate-ping': gameWinner === state.game.homeName}" :src="state.game.homeFlag" alt="home" class="absolute top-0 left-0 w-20 h-20 mx-auto">
+                                    <img :class="{'animate-ping': gameWinner === state.game.homeName}" :src="state.game.homeFlag" alt="home" class="absolute  select-none top-0 left-0 w-20 h-20 mx-auto">
                                 </div>
                                 <p class="text-center">{{ state.game.homeName }}</p>
                                 <p class="text-center" v-if="state.stats[state.game.homeName]">
@@ -563,12 +563,12 @@ function updateTimer() {
 
 
                             <!-- Away -->
-                            <div :class="{'bg-black/5': gameWinner === state.game.awayName}" class="w-1/3 flex py-2 rounded-lg flex-col items-center">
+                            <div :class="{'bg-black/5': gameWinner === state.game.awayName}" class="w-1/3 undraggable flex py-2 rounded-lg flex-col items-center">
                                 <p class="text-7xl">{{ state.game.awayVotes }}</p>
                                 <br>
                                 <div class="relative">
                                     <img :src="state.game.awayFlag" alt="away" class="w-20 h-20 mx-auto">
-                                    <img :class="{'animate-ping': gameWinner === state.game.awayName}" :src="state.game.awayFlag" alt="away-2" class="absolute top-0 left-0 w-20 h-20 mx-auto">
+                                    <img :class="{'animate-ping': gameWinner === state.game.awayName}" :src="state.game.awayFlag" alt="away-2" class="absolute select-none top-0 left-0 w-20 h-20 mx-auto">
                                 </div>
                                 <p class="text-center">{{ state.game.awayName }}</p>
                                 <p class="text-center" v-if="state.stats[state.game.awayName]">

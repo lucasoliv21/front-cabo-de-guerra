@@ -50,7 +50,7 @@ const voteHandle = (e) => {
             props.variant === 'primary' ? 'primary' : 'secondary',
             onAnimation ? 'active' : '',
         ]"
-        class="p-4 transition-all ease-in-out duration-200 flex items-center select-none justify-center cursor-pointer aspect-square rounded-full button"
+        class="p-4 transition-all undraggable ease-in-out duration-200 flex items-center select-none justify-center cursor-pointer aspect-square rounded-full button"
         >
         <slot></slot>
     </button>
